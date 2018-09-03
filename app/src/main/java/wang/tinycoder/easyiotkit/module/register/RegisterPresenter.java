@@ -79,6 +79,7 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.View, Regi
         }
 
 
+        mView.showLoading("正在注册");
         mModel.register(userName, userPassword, userRePassword, userPhone, userEmail, new Observer<NetResult>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -98,12 +99,13 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.View, Regi
 
             @Override
             public void onError(Throwable e) {
-
+                e.printStackTrace();
+                mView.hideLoading();
             }
 
             @Override
             public void onComplete() {
-
+                mView.hideLoading();
             }
         });
 

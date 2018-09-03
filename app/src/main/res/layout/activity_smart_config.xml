@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/iv_back_ground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/device_wificonfig_bg" />
+
+
+        <TextView
+            android:id="@+id/tv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_30"
+            android:drawableLeft="@drawable/ic_white_back"
+            android:drawablePadding="@dimen/dp_6"
+            android:gravity="center"
+            android:text="返回"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp_18" />
+
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <!-- wifi的ssid -->
+        <TextView
+            android:id="@+id/tv_wifi_ssid"
+            style="@style/et_smart_config"
+            android:drawableLeft="@drawable/ic_wifi"
+            android:nextFocusDown="@+id/et_wifi_pwd" />
+
+        <wang.tinycoder.easyiotkit.widget.PasswordEditText
+            android:id="@+id/et_wifi_pwd"
+            style="@style/et_smart_config"
+            android:layout_below="@+id/tv_wifi_ssid"
+            android:drawableLeft="@drawable/ic_login_password"
+            android:hint="@string/wifi_pwd_hind"
+            android:imeOptions="actionDone" />
+
+        <TextView
+            android:id="@+id/tv_start_config"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_38"
+            android:layout_below="@+id/et_wifi_pwd"
+            android:layout_marginLeft="@dimen/dp_40"
+            android:layout_marginRight="@dimen/dp_40"
+            android:layout_marginTop="@dimen/dp_24"
+            android:background="@drawable/smart_config_btn_bg"
+            android:gravity="center"
+            android:text="@string/smart_config_search"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp_16" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_start_config"
+            android:layout_marginBottom="@dimen/dp_30"
+            android:layout_marginTop="@dimen/dp_12"
+            android:gravity="center"
+            android:text="@string/smart_config_warning"
+            android:textSize="@dimen/dp_10" />
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>

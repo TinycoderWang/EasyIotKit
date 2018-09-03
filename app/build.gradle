@@ -67,5 +67,14 @@ dependencies {
     annotationProcessor rootProject.ext.dependencies["glide-compiler"]
     // 图表
     implementation rootProject.ext.dependencies["MPAndroidChart"]
+    // 沉浸式
+    implementation rootProject.ext.dependencies["immersionbar"]
+    // loadding
+    implementation rootProject.ext.dependencies["loadding"]
+    // mqtt
+    implementation rootProject.ext.dependencies["mqtt"]
+    implementation rootProject.ext.dependencies["mqtt-client"]
+    implementation project(':XSmartConfigLib')
+
 
 }

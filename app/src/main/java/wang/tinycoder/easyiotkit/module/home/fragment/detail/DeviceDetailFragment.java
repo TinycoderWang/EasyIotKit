@@ -28,7 +28,6 @@ import wang.tinycoder.easyiotkit.base.BaseActivity;
 import wang.tinycoder.easyiotkit.base.BaseFragment;
 import wang.tinycoder.easyiotkit.bean.Device;
 import wang.tinycoder.easyiotkit.bean.DeviceData;
-import wang.tinycoder.easyiotkit.module.home.HomeActivity;
 import wang.tinycoder.easyiotkit.util.SpannableStringUtils;
 
 /**
@@ -56,7 +55,7 @@ public class DeviceDetailFragment extends BaseFragment<DeviceDetailPresenter> im
 
     @Override
     protected int getlayoutId() {
-        return R.layout.fragment_dev_detail;
+        return R.layout.activity_dev_detail;
     }
 
     @Override
@@ -147,7 +146,6 @@ public class DeviceDetailFragment extends BaseFragment<DeviceDetailPresenter> im
      */
     @Override
     protected void lazyLoadData() {
-        mDevice = ((HomeActivity) mActivity).getCurrentDevice();
         if (mDevice != null) {
             mPresenter.requestDeviceData(mDevice.getId());
         }
@@ -219,7 +217,7 @@ public class DeviceDetailFragment extends BaseFragment<DeviceDetailPresenter> im
     private float getValue(DeviceData deviceData, int index) {
         try {
             if (deviceData != null) {
-                String data = deviceData.getData();
+                String data = deviceData.getData().getData();
                 if (!TextUtils.isEmpty(data)) {
                     return Float.valueOf(data.split("-")[index]);
                 }
@@ -338,7 +336,7 @@ public class DeviceDetailFragment extends BaseFragment<DeviceDetailPresenter> im
         String data;
         float y = 0;
         for (int i = 0; i < dataList.size(); i++) {
-            data = dataList.get(i).getData();
+            data = dataList.get(i).getData().getData();
             String[] split = data.split("-");
             if (split != null && split.length > index) {
                 try {

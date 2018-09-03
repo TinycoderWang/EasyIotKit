@@ -1,5 +1,6 @@
 package wang.tinycoder.easyiotkit.module.splash;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,9 +9,14 @@ import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
+import com.tbruyelle.rxpermissions2.Permission;
+import com.tbruyelle.rxpermissions2.RxPermissions;
+
 import java.util.List;
 
 import butterknife.BindView;
+import io.reactivex.functions.Consumer;
 import okhttp3.Cookie;
 import wang.tinycoder.easyiotkit.R;
 import wang.tinycoder.easyiotkit.app.EasyIotKit;
@@ -78,6 +84,28 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
 
         // 版本
         mTvVersion.setText(EasyIotKit.getInstance().getVerName());
+
+
+        // 申请定位权限
+        RxPermissions rxPermissions = new RxPermissions(this);
+        rxPermissions.requestEach(
+                Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.ACCESS_WIFI_STATE, Manifest.permission.READ_PHONE_STATE)
+                .subscribe(new Consumer<Permission>() {
+                    @Override
+                    public void accept(Permission permission) throws Exception {
+                        if (permission.granted) {
+                            Logger.i("%s 允许权限！", TAG);
+                        } else {
+                            Logger.i("%s 不允许权限！", TAG);
+                            showMessage("由于你拒绝了某些权限，部分功能将无法正常使用！");
+                        }
+                        start();
+                    }
+                });
+    }
+
+    private void start() {
         // 记录开始时间
         start = SystemClock.currentThreadTimeMillis();
         // 检查本地是否存在cookie
@@ -100,7 +128,6 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
         } else {   // 存在cookie联网确认cookie是否有效
             mPresenter.requestCurrentUser();
         }
-
     }
 
     @Override
@@ -161,19 +188,5 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
 
     }
 
-    @Override
-    public void showLoading() {
-        super.showLoading();
-    }
-
-    @Override
-    public void hideLoading() {
-        super.hideLoading();
-    }
-
-    @Override
-    public void showMessage(String message) {
-        showToast(message);
-    }
 
 }

@@ -14,6 +14,12 @@ public class Constants {
 //    public static final String BASE_HOST = "http://10.0.2.2/";
     public static final String BASE_URL = "http://116.196.90.9:2500/";
     public static final String BASE_HOST = "http://116.196.90.9/";
+    public static final String MQTT_URL = "116.196.90.9";
+    public static final int MQTT_PORT = 1883;
+    // 接收的mqtt topic模板
+    public static final String RECIVE_TOPIC_TEMP = "OUT/DEVICE/%s/%s/%s";
+    // 发送的mqtt topic模板
+    public static final String SEND_TOPIC_TEMP = "IN/DEVICE/%s/%s/%s";
     // sp名称
     public static final String SP_NAME = "easyiotkit";
     // 是否记住用户状态
@@ -30,7 +36,8 @@ public class Constants {
     public static final String EXTRA_CITY_LONGITUDE = "extra_city_longitude";
     // 所在城市纬度
     public static final String EXTRA_CITY_LATITUDE = "extra_city_latitude";
-
+    // 设备
+    public static final String EXTRA_DEVICE = "extra_device";
     public static final String WEB_TITLE = "web_title";
     public static final String WEB_URL = "web_url";
 }

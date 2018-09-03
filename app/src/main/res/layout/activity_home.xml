@@ -5,19 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!-- 标题 -->
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_42"
-        android:background="@color/colorPrimary"
-        android:gravity="center_vertical"
-        android:paddingLeft="@dimen/dp_10"
-        android:paddingRight="@dimen/dp_10"
-        android:text="设备管理"
-        android:textColor="@color/white"
-        android:textSize="@dimen/dp_16" />
-
     <!-- 内容页面 -->
     <FrameLayout
         android:id="@+id/fl_content"

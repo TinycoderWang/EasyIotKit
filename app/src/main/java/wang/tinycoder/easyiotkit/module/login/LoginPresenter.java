@@ -37,6 +37,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View, LoginContr
             return;
         }
 
+        mView.showLoading("正在登陆");
         mModel.login(userName, userPassword, new Observer<NetResult<User>>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -61,11 +62,13 @@ public class LoginPresenter extends BasePresenter<LoginContract.View, LoginContr
             @Override
             public void onError(Throwable e) {
                 Logger.e("%s login faild -- %s", TAG, e.getMessage());
+                mView.hideLoading();
             }
 
             @Override
             public void onComplete() {
                 Logger.e("%s login finish", TAG);
+                mView.hideLoading();
             }
         });
 

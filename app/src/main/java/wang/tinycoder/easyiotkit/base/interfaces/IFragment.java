@@ -10,6 +10,16 @@ package wang.tinycoder.easyiotkit.base.interfaces;
  */
 public interface IFragment {
 
+    /**
+     * 显示加载
+     */
+    void showLoading();
 
+    void showLoading(String message);
+
+    /**
+     * 隐藏加载
+     */
+    void hideLoading();
 
 }

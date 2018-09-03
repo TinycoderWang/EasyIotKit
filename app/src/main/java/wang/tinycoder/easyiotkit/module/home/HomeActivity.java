@@ -1,25 +1,19 @@
 package wang.tinycoder.easyiotkit.module.home;
 
-import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
-
-import com.orhanobut.logger.Logger;
-import com.tbruyelle.rxpermissions2.Permission;
-import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import butterknife.BindView;
 import butterknife.OnCheckedChanged;
-import io.reactivex.functions.Consumer;
 import wang.tinycoder.easyiotkit.R;
 import wang.tinycoder.easyiotkit.app.Constants;
 import wang.tinycoder.easyiotkit.base.BaseActivity;
 import wang.tinycoder.easyiotkit.bean.Device;
+import wang.tinycoder.easyiotkit.module.devdetail.DeviceDetailActivity;
 import wang.tinycoder.easyiotkit.module.home.fragment.HomeFragmentFactory;
 import wang.tinycoder.easyiotkit.module.login.LoginActivity;
 
@@ -33,8 +27,6 @@ import wang.tinycoder.easyiotkit.module.login.LoginActivity;
  */
 public class HomeActivity extends BaseActivity<HomePresenter> implements HomeContract.View {
 
-    @BindView(R.id.tv_title)
-    TextView mTvTitle;
     @BindView(R.id.fl_content)
     FrameLayout mFlContent;
     @BindView(R.id.rg_tab)
@@ -59,10 +51,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
 
 
     private HomeFragmentFactory fragmentFactory;
-    private boolean isFirst = true;
 
-    // 当前选中的设备
-    private Device mCurrentDevice;
 
     @Override
     public int getLayoutId() {
@@ -76,57 +65,15 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
 
     @Override
     public void initView(@Nullable Bundle savedInstanceState) {
-
-        // 申请定位权限
-        RxPermissions rxPermissions = new RxPermissions(this);
-        rxPermissions.requestEach(
-                Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.ACCESS_WIFI_STATE, Manifest.permission.READ_PHONE_STATE)
-                .subscribe(new Consumer<Permission>() {
-                    @Override
-                    public void accept(Permission permission) throws Exception {
-                        if (permission.granted) {
-                            Logger.i("%s 允许定位权限！", TAG);
-                        } else {
-                            Logger.i("%s 不允许定位权限！", TAG);
-                            showMessage("由于你拒绝了某些权限，系统状态部分功能将无法正常使用！");
-                        }
-                    }
-                });
-
         fragmentFactory = HomeFragmentFactory.getInstance();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (isFirst) {
-            mPresenter.switchContent(R.id.fl_content, null, fragmentFactory.create(DEV_MANAGE), DEV_MANAGE);
-            currentTab = DEV_MANAGE;
-            isFirst = false;
-        }
+        mPresenter.switchContent(R.id.fl_content, null, fragmentFactory.create(DEV_MANAGE), DEV_MANAGE);
+        currentTab = DEV_MANAGE;
     }
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
 
     }
-
-    @Override
-    public void showLoading() {
-        super.showLoading();
-    }
-
-    @Override
-    public void hideLoading() {
-        super.hideLoading();
-    }
-
-    @Override
-    public void showMessage(String message) {
-        showToast(message);
-    }
-
 
     // 底部选择
     @OnCheckedChanged({R.id.rb_dev_manage, R.id.rb_dev_detail, R.id.rb_my_setting})
@@ -135,36 +82,20 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
         if (radioButton.isChecked()) {
             switch (radioButton.getId()) {
                 case R.id.rb_dev_manage:   // 设备管理
-                    mTvTitle.setText("设备管理");
                     mPresenter.switchContent(R.id.fl_content, fragmentFactory.create(currentTab), fragmentFactory.create(DEV_MANAGE), DEV_MANAGE);
                     currentTab = DEV_MANAGE;
                     break;
                 case R.id.rb_dev_detail:   // 系统状态
-                    mTvTitle.setText("设备详情");
                     mPresenter.switchContent(R.id.fl_content, fragmentFactory.create(currentTab), fragmentFactory.create(DEV_DETAIL), DEV_DETAIL);
                     currentTab = DEV_DETAIL;
                     break;
                 case R.id.rb_my_setting:   // 设置
-                    mTvTitle.setText("个人中心");
                     mPresenter.switchContent(R.id.fl_content, fragmentFactory.create(currentTab), fragmentFactory.create(MY_SETTING), MY_SETTING);
                     currentTab = MY_SETTING;
                     break;
             }
         }
 
-    }
-
-
-    /**
-     * 显示设备的详情
-     *
-     * @param device 设备
-     */
-    public void showDetail(Device device) {
-        mTvTitle.setText("系统状态");
-        mPresenter.switchContent(R.id.fl_content, fragmentFactory.create(currentTab), fragmentFactory.create(DEV_DETAIL), DEV_DETAIL);
-        currentTab = DEV_DETAIL;
-        //((DeviceDetailFragment)fragmentFactory.create(DEV_DETAIL))
     }
 
     @Override
@@ -176,22 +107,12 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
     }
 
 
-    public Device getCurrentDevice() {
-        return mCurrentDevice;
-    }
-
-    public void setCurrentDevice(Device currentDevice) {
-        mCurrentDevice = currentDevice;
-    }
-
     // 跳转到设备详情
     public void gotoDeviceDetail(Device device) {
         if (device != null) {
-            mCurrentDevice = device;
-            mTvTitle.setText("设备详情");
-            mPresenter.switchContent(R.id.fl_content, fragmentFactory.create(currentTab), fragmentFactory.create(DEV_DETAIL), DEV_DETAIL);
-            currentTab = DEV_DETAIL;
-            mRbDevDetail.setChecked(true);
+            Intent intent = new Intent(this, DeviceDetailActivity.class);
+            intent.putExtra(Constants.EXTRA_DEVICE, device);
+            startActivity(intent);
         }
     }
 }

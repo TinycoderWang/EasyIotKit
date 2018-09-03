@@ -27,4 +27,8 @@
     <string name="github_addr">https://github.com/wwhai/EasyLinker</string>
     <string name="no_dev_msg">您还没有任何设备，赶快添加吧</string>
     <string name="tab_dev_detail">设备详情</string>
+    <string name="smart_config_search">配置设备</string>
+    <string name="wifi_ssid_hint">点击选择WIFI</string>
+    <string name="wifi_pwd_hind">请输入WIFI密码</string>
+    <string name="smart_config_warning">温馨提示:暂不支持5G频段的WIFI网络</string>
 </resources>

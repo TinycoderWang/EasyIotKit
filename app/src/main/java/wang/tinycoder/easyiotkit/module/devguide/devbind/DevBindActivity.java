@@ -1,4 +1,4 @@
-package wang.tinycoder.easyiotkit.module.devbind;
+package wang.tinycoder.easyiotkit.module.devguide.devbind;
 
 import android.Manifest;
 import android.content.Intent;
@@ -79,22 +79,6 @@ public class DevBindActivity extends BaseActivity<DevBindPresenter> implements D
     public void initData(@Nullable Bundle savedInstanceState) {
 
     }
-
-    @Override
-    public void showLoading() {
-        super.showLoading();
-    }
-
-    @Override
-    public void hideLoading() {
-        super.hideLoading();
-    }
-
-    @Override
-    public void showMessage(String message) {
-        showToast(message);
-    }
-
 
     @Override
     protected void onStart() {

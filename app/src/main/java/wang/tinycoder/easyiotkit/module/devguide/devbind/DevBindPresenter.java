@@ -1,4 +1,4 @@
-package wang.tinycoder.easyiotkit.module.devbind;
+package wang.tinycoder.easyiotkit.module.devguide.devbind;
 
 import android.text.TextUtils;
 
@@ -8,6 +8,7 @@ import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import wang.tinycoder.easyiotkit.base.BasePresenter;
 import wang.tinycoder.easyiotkit.bean.NetResult;
+
 
 /**
  * Progect：EasyLinkerAppNew

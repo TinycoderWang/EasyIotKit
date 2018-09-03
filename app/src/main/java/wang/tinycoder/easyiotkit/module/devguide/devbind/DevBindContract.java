@@ -1,4 +1,4 @@
-package wang.tinycoder.easyiotkit.module.devbind;
+package wang.tinycoder.easyiotkit.module.devguide.devbind;
 
 import io.reactivex.Observer;
 import wang.tinycoder.easyiotkit.base.interfaces.IModel;

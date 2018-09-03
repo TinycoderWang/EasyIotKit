@@ -27,7 +27,7 @@ import wang.tinycoder.easyiotkit.base.BaseActivity;
 import wang.tinycoder.easyiotkit.base.BaseFragment;
 import wang.tinycoder.easyiotkit.bean.Banner;
 import wang.tinycoder.easyiotkit.bean.Device;
-import wang.tinycoder.easyiotkit.module.devbind.DevBindActivity;
+import wang.tinycoder.easyiotkit.module.devguide.devbind.DevBindActivity;
 import wang.tinycoder.easyiotkit.module.home.HomeActivity;
 import wang.tinycoder.easyiotkit.util.DensityUtils;
 import wang.tinycoder.easyiotkit.widget.recyclerbanner.RecyclerBanner;
@@ -164,9 +164,6 @@ public class DevManageFragment extends BaseFragment<DevManagePresenter> implemen
     public void updateAllDevices() {
         List<Device> allDevices = mPresenter.getDeviceList();
         if (allDevices != null && allDevices.size() > 0) {
-            // 设置当前设备为第一个
-            ((HomeActivity) mActivity).setCurrentDevice(allDevices.get(0));
-
             if (mDevAdapter == null) {
                 // 初始化适配器
                 mDevAdapter = new DeviceAdapter(allDevices);
@@ -218,7 +215,7 @@ public class DevManageFragment extends BaseFragment<DevManagePresenter> implemen
     public void onDeviceClicked(Device device) {
 
         // 去设备详情
-        ((HomeActivity)mActivity).gotoDeviceDetail(device);
+        ((HomeActivity) mActivity).gotoDeviceDetail(device);
 
     }
 

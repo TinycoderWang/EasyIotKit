@@ -153,14 +153,6 @@ public class DeviceDetailPresenter extends BasePresenter<DeviceDetailContract.Vi
 
 
     public List<DeviceData> getCurrentData() {
-
-        // 造数据
-        DeviceData data = null;
-        currentData.clear();
-        for (int i = 0; i < 20; i++) {
-            data = new DeviceData(Math.random() * 40 + "-" + Math.random() * 50 + "-1");
-            currentData.add(data);
-        }
         return currentData;
     }
 }

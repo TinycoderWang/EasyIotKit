@@ -3,19 +3,28 @@ package wang.tinycoder.easyiotkit.base;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.ContentObserver;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
+
+import com.gyf.barlibrary.ImmersionBar;
+import com.gyf.barlibrary.OSUtils;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import wang.tinycoder.easyiotkit.app.AtyContainer;
 import wang.tinycoder.easyiotkit.base.interfaces.IActivity;
 import wang.tinycoder.easyiotkit.base.interfaces.IPresenter;
+import wang.tinycoder.easyiotkit.base.interfaces.IView;
+import wang.tinycoder.easyiotkit.widget.LoaddingDialog;
 
 /**
  * Progect：EasyLinkerApp
@@ -24,17 +33,49 @@ import wang.tinycoder.easyiotkit.base.interfaces.IPresenter;
  * Author：TinycoderWang
  * CreateTime：2018/4/1 8:53
  */
-public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivity implements IActivity {
+public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivity implements IActivity, IView {
 
     protected final String TAG = this.getClass().getSimpleName();
 
     protected Unbinder mUnbinder;
     protected P mPresenter;
     protected Toast mToast;
+    protected LoaddingDialog mLoaddingDialog;
+
+    // 沉浸式
+    protected ImmersionBar mImmersionBar;
+    private static final String NAVIGATIONBAR_IS_MIN = "navigationbar_is_min";
+    private ContentObserver mNavigationStatusObserver = new ContentObserver(new Handler()) {
+        @Override
+        public void onChange(boolean selfChange) {
+            int navigationBarIsMin = Settings.System.getInt(getContentResolver(),
+                    NAVIGATIONBAR_IS_MIN, 0);
+            if (navigationBarIsMin == 1) {
+                //导航键隐藏了
+                mImmersionBar.transparentNavigationBar().init();
+            } else {
+                //导航键显示了
+                mImmersionBar.navigationBarColor(android.R.color.black) //隐藏前导航栏的颜色
+                        .fullScreen(false)
+                        .init();
+            }
+        }
+    };
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //初始化沉浸式
+        initImmersionBar();
+        //解决华为emui3.0与3.1手机手动隐藏底部导航栏时，导航栏背景色未被隐藏的问题
+        if (OSUtils.isEMUI3_1()) {
+            //第一种
+            getContentResolver().registerContentObserver(Settings.System.getUriFor
+                    (NAVIGATIONBAR_IS_MIN), true, mNavigationStatusObserver);
+        }
+
         setContentView(getLayoutId());
         // 保存当前activity
         AtyContainer.getInstance().addActivity(this);
@@ -56,8 +97,20 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
             mPresenter.onDestroy();//释放资源
         }
         this.mPresenter = null;
+
+        // 销毁沉浸式
+        mImmersionBar.destroy();
+        mImmersionBar = null;
+
         super.onDestroy();
     }
+
+    private void initImmersionBar() {
+        //在BaseActivity里初始化
+        mImmersionBar = ImmersionBar.with(this);
+        mImmersionBar.init();
+    }
+
 
     @Override
     public void showToast(@NonNull String message) {
@@ -85,13 +138,53 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
     }
 
 
-    protected void showLoading() {
-        showToast("正在请求数据。。。。。。");
+    @Override
+    public void showLoading(final String message) {
+        try {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (mLoaddingDialog == null) {
+                        mLoaddingDialog = new LoaddingDialog();
+                        mLoaddingDialog.setContext(BaseActivity.this);
+                    }
+                    mLoaddingDialog.setMessage(TextUtils.isEmpty(message) ? "正在加载" : message);
+                    if (!mLoaddingDialog.isAdded()) {
+                        mLoaddingDialog.show(getFragmentManager(), TAG);
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
-    protected void hideLoading() {
-        showToast("请求数据完成！");
+    @Override
+    public void showLoading() {
+        showLoading(null);
+    }
+
+    @Override
+    public void hideLoading() {
+        try {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (mLoaddingDialog != null) {
+                        mLoaddingDialog.dismiss();
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Override
+    public void showMessage(String message) {
+        showToast(message);
     }
 
     /**

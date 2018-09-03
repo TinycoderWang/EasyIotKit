@@ -141,12 +141,26 @@ public abstract class BaseFragment<P extends IPresenter> extends Fragment implem
     protected abstract void initPresenter();
 
     protected abstract void initView(Bundle savedInstanceState);
-    
+
     protected void lazyLoadData() {
     }
 
     protected abstract void loadData(Bundle savedInstanceState);
 
+    @Override
+    public void showLoading(String message) {
+        ((BaseActivity) mActivity).showLoading(message);
+    }
+
+    @Override
+    public void showLoading() {
+        ((BaseActivity) mActivity).showLoading();
+    }
+
+    @Override
+    public void hideLoading() {
+        ((BaseActivity) mActivity).hideLoading();
+    }
 
     public void showToast(String message) {
         ((BaseActivity) mActivity).showToast(message);

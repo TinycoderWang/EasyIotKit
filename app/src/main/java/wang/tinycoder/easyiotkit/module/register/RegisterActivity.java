@@ -55,21 +55,6 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
 
     }
 
-    @Override
-    public void showLoading() {
-        super.showLoading();
-    }
-
-    @Override
-    public void hideLoading() {
-        super.hideLoading();
-    }
-
-    @Override
-    public void showMessage(String message) {
-        showToast(message);
-    }
-
 
     /**
      * 注册
