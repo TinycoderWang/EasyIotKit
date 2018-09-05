@@ -224,7 +224,7 @@ public class DeviceDetailActivity extends BaseActivity<DeviceDetailPresenter> im
     private void showCurentState(DeviceData deviceData) {
 
         // 温度
-        SpannableStringBuilder temp = SpannableStringUtils.getBuilder("温度：")
+        SpannableStringBuilder temp = SpannableStringUtils.getBuilder("当前温度：")
                 .append(String.format("%.2f°", getValue(deviceData, 0)))
                 .setForegroundColor(0xFFF48C7A)
                 .setProportion(1.8f)
@@ -233,7 +233,7 @@ public class DeviceDetailActivity extends BaseActivity<DeviceDetailPresenter> im
         mTvTemperature.setText(temp);
 
         // 湿度
-        SpannableStringBuilder hum = SpannableStringUtils.getBuilder("湿度：")
+        SpannableStringBuilder hum = SpannableStringUtils.getBuilder("当前湿度：")
                 .append(String.format("%.2f%%", getValue(deviceData, 1)))
                 .setForegroundColor(0xFF1DE1F7)
                 .setProportion(1.8f)

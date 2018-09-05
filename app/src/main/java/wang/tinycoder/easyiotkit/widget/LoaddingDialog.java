@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +37,6 @@ public class LoaddingDialog extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        message = "正在加载";
         setCancelable(false);
         setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Holo_Light_Dialog_MinWidth);
     }
@@ -49,6 +49,7 @@ public class LoaddingDialog extends DialogFragment {
         View view = inflater.inflate(R.layout.loadding_dialog, null);
         mLoaddingView = view.findViewById(R.id.loadding);
         mMessage = view.findViewById(R.id.msg);
+        mMessage.setText(TextUtils.isEmpty(message) ? "正在加载" : message);
         return view;
     }
 
@@ -56,7 +57,7 @@ public class LoaddingDialog extends DialogFragment {
     public void onStart() {
         super.onStart();
         Dialog dialog = getDialog();
-        dialog.getWindow().setLayout(DensityUtils.dip2px(context,120), DensityUtils.dip2px(context,120));
+        dialog.getWindow().setLayout(DensityUtils.dip2px(context, 120), DensityUtils.dip2px(context, 120));
     }
 
     public void setMessage(String message) {

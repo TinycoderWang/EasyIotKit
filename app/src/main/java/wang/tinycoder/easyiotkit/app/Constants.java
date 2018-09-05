@@ -16,6 +16,10 @@ public class Constants {
     public static final String BASE_HOST = "http://116.196.90.9/";
     public static final String MQTT_URL = "116.196.90.9";
     public static final int MQTT_PORT = 1883;
+    public static final int UDP_SEND_PORT = 2345;
+    public static final int UDP_LISTEN_PORT = 2345;
+    public static final String UDP_BORDCAST_ADDR = "255.255.255.255";
+
     // 接收的mqtt topic模板
     public static final String RECIVE_TOPIC_TEMP = "OUT/DEVICE/%s/%s/%s";
     // 发送的mqtt topic模板

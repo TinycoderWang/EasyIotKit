@@ -1,7 +1,5 @@
 package wang.tinycoder.easyiotkit.module.devguide.smartconfig;
 
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -12,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
 import com.xuhong.xsmartconfiglib.api.xEspTouchTask;
 
 import butterknife.BindView;
@@ -44,7 +43,6 @@ public class SmartConfigActivity extends BaseActivity<SmartConfigPresenter> impl
 
     private WifiUtils mWifiUtils;
     private xEspTouchTask espTouchTask;
-    private ProgressDialog dialog;
 
     @Override
     public int getLayoutId() {
@@ -117,32 +115,10 @@ public class SmartConfigActivity extends BaseActivity<SmartConfigPresenter> impl
                     .setPassWord(pwd)
                     .creat();
             startSmartConfig();
-            dialog = new ProgressDialog(SmartConfigActivity.this);
-            dialog.setMessage("努力配网中...");
-            dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            dialog.setCancelable(false);
-            dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialog.dismiss();
-                    espTouchTask.stopSmartConfig();
-                }
-            });
-            dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialog.dismiss();
-                }
-            });
-            dialog.show();
-            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setVisibility(View.GONE);
-            dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setVisibility(View.GONE);
-            dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    mTvStartConfig.setClickable(true);
-                }
-            });
+
+            // 加载对话框
+            showLoading("努力配网中");
+
 
         } else {
             showMessage("请首先连接WIFI!");
@@ -160,23 +136,21 @@ public class SmartConfigActivity extends BaseActivity<SmartConfigPresenter> impl
                 Log.e("==w", "code:" + code + ",message:" + message);
                 switch (code) {
                     case 0:
-                        dialog.setMessage("配网成功，设备正在连接服务器...");
-                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setVisibility(View.GONE);
-                        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setVisibility(View.VISIBLE);
+                        Logger.i("%s 设备正在连接服务器", TAG);
                         break;
                     case 3:
-                        dialog.setMessage("设备连接服务器成功...");
-                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setVisibility(View.VISIBLE);
-                        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setVisibility(View.GONE);
-                        Log.e("==w", "UDP广播后获取到的信息：" + message);
+                        hideLoading();
+                        Logger.i("%s 设备连接服务器成功...", TAG);
+                        Logger.i("%s UDP广播后获取到的信息 %s", TAG, message);
                         break;
                     case 2:
                     case 4:
-                        dialog.setMessage("配网失败...");
-                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setVisibility(View.VISIBLE);
-                        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setVisibility(View.GONE);
+                        Logger.i("%s 配网失败...", TAG);
+                        showMessage("配网失败！");
+                        hideLoading();
                         break;
                 }
+                mTvStartConfig.setClickable(true);
             }
         });
 
@@ -191,16 +165,15 @@ public class SmartConfigActivity extends BaseActivity<SmartConfigPresenter> impl
                 Log.e("==w", "code:" + code + ",message:" + message);
                 switch (code) {
                     case 0:
-                        dialog.setMessage("恭喜，配网成功!");
-                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setVisibility(View.GONE);
-                        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setVisibility(View.VISIBLE);
+                        Logger.i("%s 配网成功...", TAG);
+                        hideLoading();
                         break;
                     case 2:
-                        dialog.setMessage("配网失败...");
-                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setVisibility(View.VISIBLE);
-                        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setVisibility(View.GONE);
+                        Logger.i("%s 配网失败...", TAG);
+                        hideLoading();
                         break;
                 }
+                mTvStartConfig.setClickable(true);
             }
         });
     }
