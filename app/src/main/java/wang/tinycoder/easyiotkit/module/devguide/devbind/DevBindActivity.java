@@ -18,6 +18,7 @@ import io.reactivex.functions.Consumer;
 import wang.tinycoder.easyiotkit.R;
 import wang.tinycoder.easyiotkit.app.Constants;
 import wang.tinycoder.easyiotkit.base.BaseActivity;
+import wang.tinycoder.easyiotkit.bean.Device;
 import wang.tinycoder.qrcoder.core.QRCodeView;
 import wang.tinycoder.qrcoder.zxing.ZXingView;
 
@@ -134,11 +135,13 @@ public class DevBindActivity extends BaseActivity<DevBindPresenter> implements D
      * 绑定结果
      *
      * @param result
+     * @param device
      */
     @Override
-    public void onBindResult(boolean result) {
+    public void onBindResult(boolean result, Device device) {
         if (result) {   // 绑定成功
             Intent intent = getIntent();
+            intent.putExtra(Constants.EXTRA_DEVICE, device);
             setResult(RESULT_OK, intent);
             finish();
         } else {   // 绑定失败

@@ -3,6 +3,7 @@ package wang.tinycoder.easyiotkit.module.devguide.devbind;
 import io.reactivex.Observer;
 import wang.tinycoder.easyiotkit.base.interfaces.IModel;
 import wang.tinycoder.easyiotkit.base.interfaces.IView;
+import wang.tinycoder.easyiotkit.bean.Device;
 import wang.tinycoder.easyiotkit.bean.NetResult;
 
 /**
@@ -16,7 +17,7 @@ public interface DevBindContract {
 
     interface View extends IView {
 
-        void onBindResult(boolean result);
+        void onBindResult(boolean result, Device device);
     }
 
     interface Model extends IModel {
@@ -27,7 +28,7 @@ public interface DevBindContract {
          * @param deviceid 设备id
          * @param observer
          */
-        void bindDevice(String groupId, String deviceid, Observer<NetResult> observer);
+        void bindDevice(String groupId, String deviceid, Observer<NetResult<Device>> observer);
 
 
         /**
@@ -35,7 +36,7 @@ public interface DevBindContract {
          * @param deviceId 设备id
          * @param observer
          */
-        void bindDeviceToDefaultGroup(String deviceId, Observer<NetResult> observer);
+        void bindDeviceToDefaultGroup(String deviceId, Observer<NetResult<Device>> observer);
     }
 
 }

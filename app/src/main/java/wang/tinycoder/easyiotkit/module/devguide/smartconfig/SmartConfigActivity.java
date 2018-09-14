@@ -10,12 +10,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 import com.xuhong.xsmartconfiglib.api.xEspTouchTask;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import wang.tinycoder.easyiotkit.R;
+import wang.tinycoder.easyiotkit.app.Constants;
 import wang.tinycoder.easyiotkit.base.BaseActivity;
 import wang.tinycoder.easyiotkit.util.WifiUtils;
 import wang.tinycoder.easyiotkit.widget.PasswordEditText;
@@ -43,6 +45,8 @@ public class SmartConfigActivity extends BaseActivity<SmartConfigPresenter> impl
 
     private WifiUtils mWifiUtils;
     private xEspTouchTask espTouchTask;
+    // 设备的key
+    private String mDeviceKey;
 
     @Override
     public int getLayoutId() {
@@ -52,6 +56,7 @@ public class SmartConfigActivity extends BaseActivity<SmartConfigPresenter> impl
     @Override
     public void initPresenter() {
         mPresenter = new SmartConfigPresenter(this, new SmartConfigModel());
+        mDeviceKey = getIntent().getStringExtra(Constants.EXTRA_DEVICE_KEY);
     }
 
     @Override
@@ -165,11 +170,14 @@ public class SmartConfigActivity extends BaseActivity<SmartConfigPresenter> impl
                 Log.e("==w", "code:" + code + ",message:" + message);
                 switch (code) {
                     case 0:
-                        Logger.i("%s 配网成功...", TAG);
+                        Logger.i("%s 配网成功...message : %s", TAG, message);
+                        Gson gson = new Gson();
+                        EspHardMsg espHardMsg = gson.fromJson(message, EspHardMsg.class);
+                        Logger.i("ESP mac:%s , ip:%s", espHardMsg.macAddress, espHardMsg.IPAddress);
                         hideLoading();
                         break;
                     case 2:
-                        Logger.i("%s 配网失败...", TAG);
+                        Logger.i("%s 配网失败...message : %s", TAG, message);
                         hideLoading();
                         break;
                 }
@@ -183,6 +191,22 @@ public class SmartConfigActivity extends BaseActivity<SmartConfigPresenter> impl
         super.onActivityResult(requestCode, resultCode, data);
         if (WIFI_SET_REQUEST_CODE == requestCode) {
             genWifiSsid();
+        }
+    }
+
+
+    // ESP的mac和ip
+    static class EspHardMsg {
+        //{"macAddress":"68c63ac373ef","IPAddress":"192.168.2.234"}
+        public String macAddress;
+        public String IPAddress;
+
+        public EspHardMsg() {
+        }
+
+        public EspHardMsg(String macAddress, String IPAddress) {
+            this.macAddress = macAddress;
+            this.IPAddress = IPAddress;
         }
     }
 }

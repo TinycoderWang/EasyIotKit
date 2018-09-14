@@ -1,22 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="@dimen/dp_10">
+    android:layout_height="match_parent">
 
+
+    <ImageView
+        android:id="@+id/iv_header_bg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/setting_header_default_bg"
+        app:layout_constraintDimensionRatio="H,16:9"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- 编辑 -->
     <LinearLayout
         android:id="@+id/ll_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="@dimen/dp_6"
-        android:visibility="gone">
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.94"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.05">
 
         <ImageView
             android:id="@+id/iv_edit"
@@ -40,62 +55,59 @@
         android:id="@+id/iv_header"
         android:layout_width="@dimen/dp_68"
         android:layout_height="@dimen/dp_68"
-        android:layout_marginBottom="@dimen/dp_10"
-        android:layout_marginTop="@dimen/dp_10"
         android:src="@drawable/ic_header_default"
-        app:civ_border_color="@color/colorPrimary"
-        app:civ_border_width="@dimen/dp_2" />
+        app:civ_border_color="@color/white"
+        app:civ_border_width="@dimen/dp_2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.1" />
 
     <!-- 名称 -->
     <TextView
         android:id="@+id/tv_name"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_20"
-        android:layout_marginRight="@dimen/dp_80"
-        android:layout_marginTop="@dimen/dp_18"
-        android:layout_toRightOf="@+id/iv_header"
+        android:layout_marginTop="@dimen/dp_6"
         android:gravity="left"
-        android:textSize="@dimen/sp_16"
+        android:textSize="@dimen/sp_14"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_header"
         tools:text="名字" />
 
     <!-- 签名 -->
     <EditText
         android:id="@+id/et_sign"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_name"
-        android:layout_marginLeft="@dimen/dp_20"
-        android:layout_marginTop="@dimen/dp_8"
-        android:layout_toRightOf="@+id/iv_header"
+        android:layout_marginTop="@dimen/dp_4"
         android:background="@null"
         android:enabled="false"
         android:focusable="false"
-        android:gravity="left"
+        android:gravity="center"
         android:textColor="@color/nomal_text_color"
         android:textSize="@dimen/sp_14"
-        tools:text="签名：名字" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_name"
+        tools:text="签名" />
 
-    <!-- 分割 -->
-    <View
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_12"
-        android:layout_below="@+id/iv_header"
-        android:layout_marginBottom="@dimen/dp_10"
-        android:layout_marginTop="@dimen/dp_10"
-        android:background="@color/gray" />
-
-
+    
     <!-- 手机 -->
     <LinearLayout
         android:id="@+id/ll_phone"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="@dimen/dp_38"
-        android:layout_below="@+id/divider"
-        android:layout_marginTop="@dimen/dp_10"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_header_bg"
+        app:layout_constraintVertical_bias="0.1"
+        app:layout_constraintWidth_percent="0.8">
 
 
         <TextView
@@ -125,12 +137,16 @@
     <!-- 邮箱 -->
     <LinearLayout
         android:id="@+id/ll_email"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="@dimen/dp_38"
-        android:layout_below="@+id/ll_phone"
-        android:layout_marginTop="@dimen/dp_18"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_phone"
+        app:layout_constraintVertical_bias="0.1"
+        app:layout_constraintWidth_percent="0.8">
 
 
         <TextView
@@ -161,42 +177,54 @@
     <!-- QQ群 -->
     <TextView
         android:id="@+id/tv_qq_group"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/tv_github"
-        android:layout_marginBottom="@dimen/dp_20"
         android:drawableLeft="@drawable/ic_qq"
         android:drawablePadding="@dimen/dp_10"
         android:gravity="center_vertical"
         android:text="@string/qq_group"
         android:textColor="@color/text_gray"
-        android:textSize="@dimen/dp_20" />
+        android:textSize="@dimen/dp_20"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/ll_email"
+        app:layout_constraintRight_toRightOf="@+id/ll_email"
+        app:layout_constraintTop_toBottomOf="@+id/ll_email"
+        app:layout_constraintVertical_bias="0.1" />
 
 
     <!-- github -->
     <TextView
         android:id="@+id/tv_github"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/tv_logout"
-        android:layout_marginBottom="@dimen/dp_20"
         android:drawableLeft="@drawable/ic_github"
         android:drawablePadding="@dimen/dp_10"
         android:gravity="center_vertical"
         android:text="@string/github_addr"
         android:textColor="@color/blue"
-        android:textSize="@dimen/dp_15" />
+        android:textSize="@dimen/dp_15"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/tv_qq_group"
+        app:layout_constraintRight_toRightOf="@+id/tv_qq_group"
+        app:layout_constraintTop_toBottomOf="@+id/tv_qq_group"
+        app:layout_constraintVertical_bias="0.1" />
 
     <!-- 退出登陆 -->
     <TextView
         android:id="@+id/tv_logout"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="@dimen/dp_42"
-        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:layout_marginTop="71dp"
         android:background="@drawable/logout_bg"
         android:gravity="center"
         android:text="@string/logout"
         android:textColor="@color/white"
-        android:textSize="@dimen/dp_16" />
+        android:textSize="@dimen/dp_16"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_github"
+        app:layout_constraintWidth_percent="0.9" />
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

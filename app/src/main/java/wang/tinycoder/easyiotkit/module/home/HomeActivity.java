@@ -78,7 +78,6 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
     // 底部选择
     @OnCheckedChanged({R.id.rb_dev_manage, R.id.rb_dev_detail, R.id.rb_my_setting})
     public void onRadioButtonClicked(RadioButton radioButton) {
-
         if (radioButton.isChecked()) {
             switch (radioButton.getId()) {
                 case R.id.rb_dev_manage:   // 设备管理
@@ -114,5 +113,10 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
             intent.putExtra(Constants.EXTRA_DEVICE, device);
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }

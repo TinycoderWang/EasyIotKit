@@ -7,6 +7,7 @@ import com.orhanobut.logger.Logger;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import wang.tinycoder.easyiotkit.base.BasePresenter;
+import wang.tinycoder.easyiotkit.bean.Device;
 import wang.tinycoder.easyiotkit.bean.NetResult;
 
 
@@ -40,35 +41,37 @@ public class DevBindPresenter extends BasePresenter<DevBindContract.View, DevBin
 
     }
 
-    private Observer<NetResult> bindObserver() {
-        return new Observer<NetResult>() {
+    private Observer<NetResult<Device>> bindObserver() {
+        return new Observer<NetResult<Device>>() {
             @Override
             public void onSubscribe(Disposable d) {
                 mCompositeDisposable.add(d);
             }
 
             @Override
-            public void onNext(NetResult netResult) {
-                if (netResult != null) {
+            public void onNext(NetResult<Device> deviceNetResult) {
+                if (deviceNetResult != null) {
 
-                    if (NetResult.SUCCESS == netResult.getState()) {
-                        mView.onBindResult(true);
+                    if (NetResult.SUCCESS == deviceNetResult.getState()) {
+                        Device device = deviceNetResult.getData();
+                        mView.onBindResult(true,device);
                     } else {
-                        mView.onBindResult(false);
+                        mView.onBindResult(false,null);
                     }
 
-                    mView.showMessage(netResult.getMessage());
+                    mView.showMessage(deviceNetResult.getMessage());
 
                 } else {
                     mView.showMessage("网络异常，请稍后再试！");
-                    mView.onBindResult(false);
+                    mView.onBindResult(false,null);
                 }
             }
+
 
             @Override
             public void onError(Throwable e) {
                 Logger.e("%s requestDeviceBygroup error ! MSG : %s", TAG, e.getMessage());
-                mView.onBindResult(false);
+                mView.onBindResult(false,null);
             }
 
             @Override

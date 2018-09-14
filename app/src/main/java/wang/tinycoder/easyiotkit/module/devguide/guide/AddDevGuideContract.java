@@ -13,7 +13,6 @@ import wang.tinycoder.easyiotkit.base.interfaces.IView;
 public interface AddDevGuideContract {
     interface View extends IView {
 
-        void onBindResult(boolean result);
     }
 
     interface Model extends IModel {

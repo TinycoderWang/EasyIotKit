@@ -9,8 +9,7 @@ import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.widget.TextView;
 
-import com.orhanobut.logger.Logger;
-import com.tbruyelle.rxpermissions2.Permission;
+import com.gyf.barlibrary.ImmersionBar;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.util.List;
@@ -70,6 +69,12 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
     };
 
     @Override
+    protected void initImmersionBar() {
+        mImmersionBar = ImmersionBar.with(this).transparentBar();
+        mImmersionBar.init();
+    }
+
+    @Override
     public int getLayoutId() {
         return R.layout.activity_splash;
     }
@@ -88,17 +93,16 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
 
         // 申请定位权限
         RxPermissions rxPermissions = new RxPermissions(this);
-        rxPermissions.requestEach(
+        rxPermissions.request(
                 Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.ACCESS_WIFI_STATE, Manifest.permission.READ_PHONE_STATE)
-                .subscribe(new Consumer<Permission>() {
+                .subscribe(new Consumer<Boolean>() {
                     @Override
-                    public void accept(Permission permission) throws Exception {
-                        if (permission.granted) {
-                            Logger.i("%s 允许权限！", TAG);
-                        } else {
-                            Logger.i("%s 不允许权限！", TAG);
-                            showMessage("由于你拒绝了某些权限，部分功能将无法正常使用！");
+                    public void accept(Boolean aBoolean) throws Exception {
+                        if (aBoolean) {   // 全部权限通过
+
+                        } else {   // 至少有一项不通过
+                            showToast("您拒绝了某些权限，某些功能可能无法正常使用！");
                         }
                         start();
                     }

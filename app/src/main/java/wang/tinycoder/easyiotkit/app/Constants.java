@@ -42,6 +42,9 @@ public class Constants {
     public static final String EXTRA_CITY_LATITUDE = "extra_city_latitude";
     // 设备
     public static final String EXTRA_DEVICE = "extra_device";
+    public static final String EXTRA_DEVICE_KEY = "extra_device_key";
+    
     public static final String WEB_TITLE = "web_title";
     public static final String WEB_URL = "web_url";
+
 }

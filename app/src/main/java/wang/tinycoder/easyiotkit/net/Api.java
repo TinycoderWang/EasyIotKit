@@ -8,6 +8,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import wang.tinycoder.easyiotkit.bean.Device;
 import wang.tinycoder.easyiotkit.bean.DeviceData;
 import wang.tinycoder.easyiotkit.bean.Group;
 import wang.tinycoder.easyiotkit.bean.GroupDevData;
@@ -152,8 +153,8 @@ public interface Api {
      * @return
      */
     @GET("user/bind/{deviceId}/{groupId}")
-    Observable<NetResult> bindDevice(@Path("deviceId") String deviceId,
-                                     @Path("groupId") String groupId);
+    Observable<NetResult<Device>> bindDevice(@Path("deviceId") String deviceId,
+                                             @Path("groupId") String groupId);
 
 
     /**
@@ -163,7 +164,7 @@ public interface Api {
      * @return
      */
     @GET("user/bindToDefaultGroup/{deviceId}")
-    Observable<NetResult> bindDeviceByDefaute(@Path("deviceId") String deviceId);
+    Observable<NetResult<Device>> bindDeviceByDefaute(@Path("deviceId") String deviceId);
 
     /**
      * 创建设备

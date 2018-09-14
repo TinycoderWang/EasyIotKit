@@ -54,8 +54,8 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.Holder> {
             // Banner图片
             GlideApp.with(mContext)
                     .load(url)
-                    .placeholder(R.drawable.ic_banner_holder)
-                    .error(R.drawable.ic_banner_holder)
+                    .placeholder(R.drawable.logo)
+                    .error(R.drawable.logo)
                     .into(holder.mIvBanner);
 
             // 标题

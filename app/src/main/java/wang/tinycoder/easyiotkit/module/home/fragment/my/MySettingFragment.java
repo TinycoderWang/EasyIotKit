@@ -33,12 +33,13 @@ import wang.tinycoder.easyiotkit.widget.CircleImageView;
  * CreateTime：2018/4/22 10:55
  */
 public class MySettingFragment extends BaseFragment<MySettingPresenter> implements MySettingContract.View {
+
+    @BindView(R.id.iv_header_bg)
+    ImageView mIvHeaderBg;
     @BindView(R.id.iv_header)
     CircleImageView mIvHeader;
     @BindView(R.id.tv_name)
     TextView mTvName;
-    @BindView(R.id.divider)
-    View mDivider;
     @BindView(R.id.et_sign)
     EditText mEtSign;
     @BindView(R.id.et_phone)

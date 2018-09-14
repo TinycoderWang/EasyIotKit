@@ -46,7 +46,7 @@
         <item name="android:layout_height">@dimen/dp_36</item>
         <item name="android:layout_marginLeft">@dimen/dp_40</item>
         <item name="android:layout_marginRight">@dimen/dp_40</item>
-        <item name="android:layout_marginTop">@dimen/dp_24</item>
+        <item name="android:layout_marginTop">@dimen/dp_20</item>
         <item name="android:background">@drawable/white_corners_bg</item>
         <item name="android:drawablePadding">@dimen/dp_10</item>
         <item name="android:gravity">center_vertical</item>

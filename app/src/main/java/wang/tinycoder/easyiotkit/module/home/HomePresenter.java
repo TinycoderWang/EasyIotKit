@@ -42,6 +42,11 @@ public class HomePresenter extends BasePresenter<HomeContract.View, HomeContract
      * @param position        到的fragment的索引
      */
     public void switchContent(@IdRes int fragmentContent, BaseFragment from, BaseFragment to, int position) {
+
+        if (from == null && to == null) {
+            return;
+        }
+
         if (mFragment != to) {
             mFragment = to;
             if (mFragmentManager == null) {
@@ -57,7 +62,9 @@ public class HomePresenter extends BasePresenter<HomeContract.View, HomeContract
                             .add(fragmentContent, to, String.valueOf(position)).show(to).commit(); // 隐藏当前的fragment，add下一个到Activity中
                 }
             } else {
-                transaction.hide(from).show(to).commit(); // 隐藏当前的fragment，显示下一个
+                if (from != null) {
+                    transaction.hide(from).show(to).commit(); // 隐藏当前的fragment，显示下一个
+                }
             }
         }
     }
