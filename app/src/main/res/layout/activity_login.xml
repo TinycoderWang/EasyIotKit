@@ -1,108 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/login_bg"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical">
+    android:background="@drawable/login_bg"
+    android:fitsSystemWindows="true">
 
 
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/tv_logo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_40"
+        android:text="@string/app_name"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp_40"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/v_container"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fontFamily="monospace"
-        android:gravity="center"
-        android:text="@string/login_title"
-        android:textColor="@color/text_white"
-        android:textSize="@dimen/dp_30"
-        android:textStyle="bold" />
+        android:background="@drawable/white_big_corner_bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent="0.6"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_logo"
+        app:layout_constraintWidth_percent="0.8" />
 
 
     <!-- 用户名 -->
+    <TextView
+        android:id="@+id/tv_user_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginRight="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_30"
+        android:text="用户名"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/dp_14"
+        app:layout_constraintLeft_toLeftOf="@+id/v_container"
+        app:layout_constraintRight_toRightOf="@+id/v_container"
+        app:layout_constraintTop_toTopOf="@+id/v_container" />
+
     <EditText
         android:id="@+id/et_user_name"
         style="@style/login_edittext_style"
+        android:layout_marginTop="@dimen/dp_6"
         android:drawableLeft="@drawable/ic_login_user_name"
         android:hint="@string/user_name_hint"
         android:imeOptions="actionNext"
         android:inputType="textVisiblePassword"
         android:nextFocusDown="@+id/et_password"
-        android:text="tinycoder" />
+        android:text="tinycoder"
+        app:layout_constraintLeft_toLeftOf="@+id/tv_user_name"
+        app:layout_constraintRight_toRightOf="@+id/tv_user_name"
+        app:layout_constraintTop_toBottomOf="@+id/tv_user_name" />
 
     <!-- 密码 -->
+    <TextView
+        android:id="@+id/tv_user_pwd"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_20"
+        android:text="密码"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/dp_14"
+        app:layout_constraintLeft_toLeftOf="@+id/tv_user_name"
+        app:layout_constraintRight_toRightOf="@+id/tv_user_name"
+        app:layout_constraintTop_toBottomOf="@+id/et_user_name" />
+
     <wang.tinycoder.easyiotkit.widget.PasswordEditText
         android:id="@+id/et_password"
         style="@style/login_edittext_style"
-        android:layout_marginTop="@dimen/dp_30"
+        android:layout_marginTop="@dimen/dp_6"
         android:drawableLeft="@drawable/ic_login_password"
         android:hint="@string/user_password_hint"
         android:imeOptions="actionDone"
-        android:text="tinycoder" />
+        android:text="tinycoder"
+        app:layout_constraintLeft_toLeftOf="@+id/tv_user_name"
+        app:layout_constraintRight_toRightOf="@+id/tv_user_name"
+        app:layout_constraintTop_toBottomOf="@+id/tv_user_pwd" />
 
     <!-- 登陆 -->
     <Button
         android:id="@+id/btn_login"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_52"
-        android:layout_marginLeft="@dimen/dp_30"
-        android:layout_marginRight="@dimen/dp_30"
-        android:layout_marginTop="@dimen/dp_30"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp_48"
+        android:layout_marginTop="@dimen/dp_38"
+        android:background="@drawable/login_btn_bg"
         android:padding="@dimen/dp_1"
         android:text="@string/btn_login"
-        android:textSize="@dimen/sp_24" />
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_20"
+        app:layout_constraintLeft_toLeftOf="@+id/tv_user_name"
+        app:layout_constraintRight_toRightOf="@+id/tv_user_name"
+        app:layout_constraintTop_toBottomOf="@+id/et_password" />
+
+
+    <!-- 记住用户名(暂时不用此功能，默认开启) -->
+    <CheckBox
+        android:id="@+id/cb_remember"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_6"
+        android:checked="true"
+        android:text="记住状态"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/sp_14"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="@+id/tv_user_name"
+        app:layout_constraintRight_toRightOf="@+id/tv_user_name"
+        app:layout_constraintTop_toBottomOf="@+id/btn_login" />
 
     <!-- 注册 -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_42"
-        android:layout_marginLeft="@dimen/dp_30"
-        android:layout_marginRight="@dimen/dp_30"
-        android:layout_marginTop="@dimen/dp_10"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <CheckBox
-            android:id="@+id/cb_remember"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="记住状态"
-            android:textColor="@color/text_white"
-            android:textSize="@dimen/sp_16" />
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
-
-        <TextView
-            android:id="@+id/tv_register"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/dp_20"
-            android:paddingRight="@dimen/dp_4"
-            android:text="@string/register"
-            android:textColor="@color/login_register_text_color"
-            android:textSize="@dimen/sp_16" />
-
-    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_register"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_30"
+        android:gravity="center"
+        android:text="@string/register"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/sp_14"
+        app:layout_constraintBottom_toBottomOf="@+id/v_container"
+        app:layout_constraintLeft_toLeftOf="@+id/tv_user_name"
+        app:layout_constraintRight_toRightOf="@+id/tv_user_name" />
 
 
     <!-- 版本 -->
     <TextView
         android:id="@+id/tv_version"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.5"
-        android:gravity="bottom|center_horizontal"
-        android:paddingBottom="12dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:gravity="center"
         android:textColor="@color/text_white"
         android:textSize="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         tools:text="V 1.0.0" />
 
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

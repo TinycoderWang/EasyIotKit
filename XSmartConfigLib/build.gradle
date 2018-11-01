@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion rootProject.ext.android["compileSdkVersion"]
+    buildToolsVersion rootProject.ext.android["buildToolsVersion"]
 
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 25
+        minSdkVersion rootProject.ext.android["minSdkVersion"]
+        targetSdkVersion rootProject.ext.android["targetSdkVersion"]
         versionCode 1
         versionName "1.0"
     }
@@ -31,12 +31,12 @@ task makeJar(type: Copy) {
     //（我们只关心classes.jar这个文件）
     include('classes.jar')
     //重命名
-    rename ('classes.jar', 'XSmartConfig_V1.jar')
+    rename('classes.jar', 'XSmartConfig_V1.jar')
 }
 
 makeJar.dependsOn(build)
 
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    implementation rootProject.ext.dependencies["appcompat-v7"]
 }

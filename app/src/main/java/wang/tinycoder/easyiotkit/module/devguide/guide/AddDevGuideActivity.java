@@ -115,6 +115,10 @@ public class AddDevGuideActivity extends BaseActivity<AddDevGuidePresenter> impl
                     mDevice = (Device) data.getSerializableExtra(Constants.EXTRA_DEVICE);
                     if (mDevice != null) {
                         stype = CONFIG;
+                        // 开始smartconfig
+                        Intent configIntent = new Intent(this,SmartConfigActivity.class);
+                        configIntent.putExtra(Constants.EXTRA_DEVICE_KEY,mDevice.getKey());
+                        startActivityForResult(configIntent,CONFIG);
                     }
                 }
             } else {

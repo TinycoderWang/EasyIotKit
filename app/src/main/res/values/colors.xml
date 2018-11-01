@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FF212729</color>
-    <color name="colorPrimaryDark">#FF212729</color>
-    <color name="colorAccent">#1296db</color>
+    <color name="colorPrimary">#04BAAB</color>
+    <color name="colorPrimaryDark">#01C6B2</color>
+    <color name="colorAccent">#10AC9F</color>
     <!-- 登陆的背景色 -->
     <color name="login_bg">#212729</color>
     <!-- 字体白色 -->
@@ -22,6 +22,7 @@
     <color name="online">#07F997</color>
     <color name="offline">#FC2D22</color>
     <color name="blue">#0000FF</color>
+    <color name="light_gray">#55AAAAAA</color>
 
 
 </resources>

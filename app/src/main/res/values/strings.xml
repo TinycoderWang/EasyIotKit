@@ -3,7 +3,7 @@
     <string name="user_name_hint">用户名</string>
     <string name="user_password_hint">密码</string>
     <string name="btn_login">登        陆</string>
-    <string name="register">立即注册</string>
+    <string name="register">还没有账号？立即注册</string>
     <string name="login_title">EasyIotKit</string>
     <string name="register_title">用户注册</string>
     <string name="btn_register">注       册</string>

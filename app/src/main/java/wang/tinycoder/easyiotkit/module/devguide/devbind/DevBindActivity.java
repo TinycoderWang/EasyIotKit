@@ -139,19 +139,43 @@ public class DevBindActivity extends BaseActivity<DevBindPresenter> implements D
      */
     @Override
     public void onBindResult(boolean result, Device device) {
-        if (result) {   // 绑定成功
+
+        if(Constants.DEBUG){
             Intent intent = getIntent();
-            intent.putExtra(Constants.EXTRA_DEVICE, device);
+            Device deviceDebug = new Device();
+            deviceDebug.setId("1234567891234");
+            deviceDebug.setKey("/6666666666666/7777777777777/1234567891234");
+            intent.putExtra(Constants.EXTRA_DEVICE, deviceDebug);
             setResult(RESULT_OK, intent);
             finish();
-        } else {   // 绑定失败
-            if (hasCameraPermission) {
-                mZxvScanner.startSpotDelay(100);
-                mZxvScanner.startCamera();
+        }else{
+            if (result) {   // 绑定成功
+                Intent intent = getIntent();
+                intent.putExtra(Constants.EXTRA_DEVICE, device);
+                setResult(RESULT_OK, intent);
+                finish();
+            } else {   // 绑定失败
+                if (hasCameraPermission) {
+                    mZxvScanner.startSpotDelay(100);
+                    mZxvScanner.startCamera();
 //            // 打开前摄像头
 //            mZxvScanner.startCamera(Camera.CameraInfo.CAMERA_FACING_FRONT);
-                mZxvScanner.showScanRect();
+                    mZxvScanner.showScanRect();
+                }
             }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(Constants.DEBUG){
+            Intent intent = getIntent();
+            Device deviceDebug = new Device();
+            deviceDebug.setId("1234567891234");
+            deviceDebug.setKey("/6666666666666/7777777777777/1234567891234");
+            intent.putExtra(Constants.EXTRA_DEVICE, deviceDebug);
+            setResult(RESULT_OK, intent);
+            finish();
         }
     }
 }

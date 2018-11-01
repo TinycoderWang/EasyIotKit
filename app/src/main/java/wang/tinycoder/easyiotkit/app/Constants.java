@@ -9,6 +9,9 @@ package wang.tinycoder.easyiotkit.app;
  */
 public class Constants {
 
+    // 调试模式
+    public static final boolean DEBUG = true;
+
     // 服务器地址·
 //    public static final String BASE_URL = "http://10.0.2.2:2500/";
 //    public static final String BASE_HOST = "http://10.0.2.2/";
@@ -43,7 +46,7 @@ public class Constants {
     // 设备
     public static final String EXTRA_DEVICE = "extra_device";
     public static final String EXTRA_DEVICE_KEY = "extra_device_key";
-    
+
     public static final String WEB_TITLE = "web_title";
     public static final String WEB_URL = "web_url";
 
