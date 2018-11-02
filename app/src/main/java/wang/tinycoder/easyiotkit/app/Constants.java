@@ -20,8 +20,9 @@ public class Constants {
     public static final String MQTT_URL = "116.196.90.9";
     public static final int MQTT_PORT = 1883;
     public static final int UDP_SEND_PORT = 2345;
-    public static final int UDP_LISTEN_PORT = 2345;
+    public static final int UDP_LISTEN_PORT = 4567;
     public static final String UDP_BORDCAST_ADDR = "255.255.255.255";
+    public static final String SMART_CONFIG_SUCCESS = "success";
 
     // 接收的mqtt topic模板
     public static final String RECIVE_TOPIC_TEMP = "OUT/DEVICE/%s/%s/%s";

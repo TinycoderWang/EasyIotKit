@@ -37,6 +37,8 @@ public class AddDevGuideActivity extends BaseActivity<AddDevGuidePresenter> impl
     private final int CONFIG = 1;
     private final int FINISH = 2;
     private int stype = BIND;
+    // 绑定成功
+    private boolean bindSuccess;
 
     @Override
     public int getLayoutId() {
@@ -81,25 +83,25 @@ public class AddDevGuideActivity extends BaseActivity<AddDevGuidePresenter> impl
 
     @OnClick({R.id.tv_back, R.id.tv_sure})
     public void onViewClicked(View view) {
+        Intent intent = null;
         switch (view.getId()) {
             case R.id.tv_back:   // 返回
                 onBackPressed();
                 break;
             case R.id.tv_sure:   // 确定
-                Intent intent = null;
                 if (BIND == stype) {
                     intent = new Intent(this, DevBindActivity.class);
                     startActivityForResult(intent, stype);
                 } else if (CONFIG == stype) {
                     intent = new Intent(this, SmartConfigActivity.class);
                     String key = "";
-                    if(mDevice!=null){
+                    if (mDevice != null) {
                         key = mDevice.getKey();
                     }
-                    intent.putExtra(Constants.EXTRA_DEVICE_KEY,key);
+                    intent.putExtra(Constants.EXTRA_DEVICE_KEY, key);
                     startActivityForResult(intent, stype);
                 } else {
-                    finish();
+                    onBackPressed();
                 }
                 break;
         }
@@ -116,22 +118,37 @@ public class AddDevGuideActivity extends BaseActivity<AddDevGuidePresenter> impl
                     if (mDevice != null) {
                         stype = CONFIG;
                         // 开始smartconfig
-                        Intent configIntent = new Intent(this,SmartConfigActivity.class);
-                        configIntent.putExtra(Constants.EXTRA_DEVICE_KEY,mDevice.getKey());
-                        startActivityForResult(configIntent,CONFIG);
+                        Intent configIntent = new Intent(this, SmartConfigActivity.class);
+                        configIntent.putExtra(Constants.EXTRA_DEVICE_KEY, mDevice.getKey());
+                        startActivityForResult(configIntent, CONFIG);
                     }
                 }
             } else {
+                bindSuccess = false;
                 showToast("绑定失败！");
             }
         } else if (CONFIG == requestCode) {
             if (RESULT_OK == resultCode) {
                 stype = FINISH;
+                bindSuccess = true;
             } else {
+                bindSuccess = false;
                 showToast("配网失败！");
             }
         }
 
         changeShow(stype);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        if (bindSuccess) {
+            setResult(RESULT_OK, intent);
+        } else {
+            setResult(RESULT_CANCELED, intent);
+        }
+        finish();
     }
 }

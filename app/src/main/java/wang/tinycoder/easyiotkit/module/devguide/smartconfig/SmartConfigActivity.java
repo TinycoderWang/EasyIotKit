@@ -19,6 +19,7 @@ import butterknife.OnClick;
 import wang.tinycoder.easyiotkit.R;
 import wang.tinycoder.easyiotkit.app.Constants;
 import wang.tinycoder.easyiotkit.base.BaseActivity;
+import wang.tinycoder.easyiotkit.net.udp.UdpClient;
 import wang.tinycoder.easyiotkit.util.WifiUtils;
 import wang.tinycoder.easyiotkit.widget.PasswordEditText;
 
@@ -170,15 +171,23 @@ public class SmartConfigActivity extends BaseActivity<SmartConfigPresenter> impl
                 Log.e("==w", "code:" + code + ",message:" + message);
                 switch (code) {
                     case 0:
-                        Logger.i("%s 配网成功...message : %s", TAG, message);
+                        Logger.i("%s ESP8266 配网成功...message : %s", TAG, message);
                         Gson gson = new Gson();
                         EspHardMsg espHardMsg = gson.fromJson(message, EspHardMsg.class);
                         Logger.i("ESP mac:%s , ip:%s", espHardMsg.macAddress, espHardMsg.IPAddress);
+                        // 给ESP8266发送key
+                        UdpClient udpClient = new UdpClient.Builder(espHardMsg.IPAddress, Constants.UDP_SEND_PORT, Constants.UDP_LISTEN_PORT)
+                                .setReceiveListener(udpReceiveListener)
+                                .build();
+                        // 发送udp广播
+                        udpClient.send(mDeviceKey);
+                        // 隐藏进度
                         hideLoading();
                         break;
                     case 2:
                         Logger.i("%s 配网失败...message : %s", TAG, message);
                         hideLoading();
+                        showToast("配网失败，检查您的WIFI密码是否正确！");
                         break;
                 }
                 mTvStartConfig.setClickable(true);
@@ -209,4 +218,21 @@ public class SmartConfigActivity extends BaseActivity<SmartConfigPresenter> impl
             this.IPAddress = IPAddress;
         }
     }
+
+    /**
+     * udp接收监听
+     */
+    private UdpClient.ReceiveListener udpReceiveListener = new UdpClient.ReceiveListener() {
+        @Override
+        public void onReceiveMessage(String message) {
+            // 收到ESP8266的回应
+            Logger.i("%s udp receive : " + message);
+            if (Constants.SMART_CONFIG_SUCCESS.equalsIgnoreCase(message)) {
+                // 隐藏进度
+                hideLoading();
+            } else {
+                showToast(message);
+            }
+        }
+    };
 }

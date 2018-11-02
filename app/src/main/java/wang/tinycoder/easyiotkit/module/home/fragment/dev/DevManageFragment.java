@@ -209,7 +209,6 @@ public class DevManageFragment extends BaseFragment<DevManagePresenter> implemen
     public void requestError() {
         mRlNoDev.setVisibility(View.GONE);
         mRcvDevList.setVisibility(View.GONE);
-        mFlbAddDev.setVisibility(View.GONE);
         mTvMessage.setText("网络错误\n点击刷新");
         mTvMessage.setVisibility(View.VISIBLE);
     }
@@ -268,12 +267,10 @@ public class DevManageFragment extends BaseFragment<DevManagePresenter> implemen
     private void isNoneDevice(boolean is) {
         if (is) {
             mRlNoDev.setVisibility(View.VISIBLE);
-            mFlbAddDev.setVisibility(View.GONE);
             mRcvDevList.setVisibility(View.GONE);
             mTvMessage.setVisibility(View.GONE);
         } else {
             mRlNoDev.setVisibility(View.GONE);
-            mFlbAddDev.setVisibility(View.VISIBLE);
             mRcvDevList.setVisibility(View.VISIBLE);
             mTvMessage.setVisibility(View.GONE);
         }
