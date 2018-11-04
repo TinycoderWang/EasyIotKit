@@ -140,15 +140,15 @@ public class DevBindActivity extends BaseActivity<DevBindPresenter> implements D
     @Override
     public void onBindResult(boolean result, Device device) {
 
-        if(Constants.DEBUG){
+        if (Constants.DEBUG) {
             Intent intent = getIntent();
             Device deviceDebug = new Device();
             deviceDebug.setId("1234567891234");
-            deviceDebug.setKey("/6666666666666/7777777777777/1234567891234");
+            deviceDebug.setKey("1533608432741/1533635877417/1536378237855");
             intent.putExtra(Constants.EXTRA_DEVICE, deviceDebug);
             setResult(RESULT_OK, intent);
             finish();
-        }else{
+        } else {
             if (result) {   // 绑定成功
                 Intent intent = getIntent();
                 intent.putExtra(Constants.EXTRA_DEVICE, device);
@@ -168,13 +168,15 @@ public class DevBindActivity extends BaseActivity<DevBindPresenter> implements D
 
     @Override
     public void onBackPressed() {
-        if(Constants.DEBUG){
+        if (Constants.DEBUG) {
             Intent intent = getIntent();
             Device deviceDebug = new Device();
-            deviceDebug.setId("1234567891234");
-            deviceDebug.setKey("/6666666666666/7777777777777/1234567891234");
+            deviceDebug.setId("1536378237855");
+            deviceDebug.setKey("1533608432741/1533635877417/1536378237855");
             intent.putExtra(Constants.EXTRA_DEVICE, deviceDebug);
             setResult(RESULT_OK, intent);
+            finish();
+        } else {
             finish();
         }
     }

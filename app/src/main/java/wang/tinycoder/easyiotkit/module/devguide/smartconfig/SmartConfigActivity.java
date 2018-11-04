@@ -14,8 +14,15 @@ import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 import com.xuhong.xsmartconfiglib.api.xEspTouchTask;
 
+import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import wang.tinycoder.easyiotkit.R;
 import wang.tinycoder.easyiotkit.app.Constants;
 import wang.tinycoder.easyiotkit.base.BaseActivity;
@@ -48,6 +55,10 @@ public class SmartConfigActivity extends BaseActivity<SmartConfigPresenter> impl
     private xEspTouchTask espTouchTask;
     // 设备的key
     private String mDeviceKey;
+    // UDP的Disposable
+    private Disposable udpDisposable;
+    private final int UDP_RETRY_TIMES = 5;
+    private int udpSendCount;
 
     @Override
     public int getLayoutId() {
@@ -121,10 +132,8 @@ public class SmartConfigActivity extends BaseActivity<SmartConfigPresenter> impl
                     .setPassWord(pwd)
                     .creat();
             startSmartConfig();
-
             // 加载对话框
             showLoading("努力配网中");
-
 
         } else {
             showMessage("请首先连接WIFI!");
@@ -164,11 +173,10 @@ public class SmartConfigActivity extends BaseActivity<SmartConfigPresenter> impl
 
     //配网后不带UDP的使用示范
     private void startSmartConfig() {
-        espTouchTask.startSmartConfig();
         espTouchTask.setEspTouchTaskListener(new xEspTouchTask.EspTouchTaskListener() {
             @Override
             public void EspTouchTaskCallback(int code, String message) {
-                Log.e("==w", "code:" + code + ",message:" + message);
+                Logger.i("%s  : code:%d  ,  message:%s", TAG, code, message);
                 switch (code) {
                     case 0:
                         Logger.i("%s ESP8266 配网成功...message : %s", TAG, message);
@@ -176,13 +184,49 @@ public class SmartConfigActivity extends BaseActivity<SmartConfigPresenter> impl
                         EspHardMsg espHardMsg = gson.fromJson(message, EspHardMsg.class);
                         Logger.i("ESP mac:%s , ip:%s", espHardMsg.macAddress, espHardMsg.IPAddress);
                         // 给ESP8266发送key
-                        UdpClient udpClient = new UdpClient.Builder(espHardMsg.IPAddress, Constants.UDP_SEND_PORT, Constants.UDP_LISTEN_PORT)
+                        final UdpClient udpClient = new UdpClient.Builder(espHardMsg.IPAddress, Constants.UDP_SEND_PORT, Constants.UDP_LISTEN_PORT)
                                 .setReceiveListener(udpReceiveListener)
                                 .build();
-                        // 发送udp广播
-                        udpClient.send(mDeviceKey);
-                        // 隐藏进度
-                        hideLoading();
+                        // 延时发送udp广播
+                        Observable.interval(3, 10, TimeUnit.SECONDS)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Observer<Long>() {
+                                    @Override
+                                    public void onSubscribe(Disposable d) {
+                                        udpDisposable = d;
+                                    }
+
+                                    @Override
+                                    public void onNext(Long aLong) {
+                                        Logger.i("%s sendUdp , times : %d", TAG, udpSendCount);
+                                        if (udpSendCount < UDP_RETRY_TIMES) {
+                                            udpClient.send(String.format("easykey:%s", mDeviceKey));
+                                            udpSendCount++;
+                                        } else {
+                                            udpSendCount = 0;
+                                            udpDisposable.dispose();
+                                            onError(new Throwable("超时！"));
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        // 隐藏进度
+                                        showToast("配网失败！");
+                                        hideLoading();
+                                    }
+
+                                    @Override
+                                    public void onComplete() {
+                                        // 隐藏进度
+                                        showToast("配网成功！");
+                                        hideLoading();
+                                    }
+                                });
+
+                        // 开启UDP监听
+                        udpClient.startListen();
                         break;
                     case 2:
                         Logger.i("%s 配网失败...message : %s", TAG, message);
@@ -193,6 +237,7 @@ public class SmartConfigActivity extends BaseActivity<SmartConfigPresenter> impl
                 mTvStartConfig.setClickable(true);
             }
         });
+        espTouchTask.startSmartConfig();
     }
 
     @Override
@@ -224,15 +269,33 @@ public class SmartConfigActivity extends BaseActivity<SmartConfigPresenter> impl
      */
     private UdpClient.ReceiveListener udpReceiveListener = new UdpClient.ReceiveListener() {
         @Override
-        public void onReceiveMessage(String message) {
-            // 收到ESP8266的回应
-            Logger.i("%s udp receive : " + message);
-            if (Constants.SMART_CONFIG_SUCCESS.equalsIgnoreCase(message)) {
-                // 隐藏进度
-                hideLoading();
-            } else {
-                showToast(message);
-            }
+        public void onReceiveMessage(final String message) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    // 收到ESP8266的回应
+                    Logger.i("%s udp receive : " + message);
+                    if (Constants.SMART_CONFIG_SUCCESS.equalsIgnoreCase(message)) {
+                        showToast("配网成功！");
+                        setResult(RESULT_OK);
+                        finish();
+                    } else {
+                        showToast(message);
+                    }
+                    udpSendCount = 0;
+                    if (!udpDisposable.isDisposed()) {
+                        udpDisposable.dispose();
+                    }
+                    // 隐藏进度
+                    hideLoading();
+                }
+            });
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_CANCELED);
+        finish();
+    }
 }
