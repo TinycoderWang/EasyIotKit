@@ -1,7 +1,6 @@
 package wang.tinycoder.easyiotkit.module.home.fragment.detail;
 
 import android.os.Bundle;
-import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -24,7 +23,6 @@ import wang.tinycoder.easyiotkit.bean.Device;
 import wang.tinycoder.easyiotkit.bean.DeviceData;
 import wang.tinycoder.easyiotkit.bean.WeatherBean;
 import wang.tinycoder.easyiotkit.module.home.HomeActivity;
-import wang.tinycoder.easyiotkit.util.SpannableStringUtils;
 
 /**
  * Progect：EasyIotKit
@@ -273,23 +271,6 @@ public class DeviceDetailFragment extends BaseFragment<DeviceDetailPresenter> im
      */
     private void showCurentState(DeviceData deviceData) {
 
-        // 温度
-        SpannableStringBuilder temp = SpannableStringUtils.getBuilder("温度：")
-                .append(String.format("%.2f°", getValue(deviceData, 0)))
-                .setForegroundColor(0xFFF48C7A)
-                .setProportion(1.8f)
-                .setBold()
-                .create();
-        mTvTemperature.setText(temp);
-
-        // 湿度
-        SpannableStringBuilder hum = SpannableStringUtils.getBuilder("湿度：")
-                .append(String.format("%.2f%%", getValue(deviceData, 1)))
-                .setForegroundColor(0xFF1DE1F7)
-                .setProportion(1.8f)
-                .setBold()
-                .create();
-        mTvHumidity.setText(hum);
     }
 
     /**

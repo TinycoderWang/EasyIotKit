@@ -22,15 +22,6 @@ public interface MySettingContract {
 
         void logoutSuccess();
 
-        String getPhone();
-
-        String getEmail();
-
-        boolean phoneIsChange(String phone);
-
-        boolean emailIsChange(String email);
-
-        void noUserInfoChange();
     }
 
     interface Model extends IModel {

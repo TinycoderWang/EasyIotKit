@@ -5,12 +5,10 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -24,6 +22,7 @@ import wang.tinycoder.easyiotkit.module.login.LoginActivity;
 import wang.tinycoder.easyiotkit.module.webview.WebViewActivity;
 import wang.tinycoder.easyiotkit.net.imageloader.GlideApp;
 import wang.tinycoder.easyiotkit.widget.CircleImageView;
+import wang.tinycoder.easyiotkit.widget.DrawableSizeTextView;
 
 /**
  * Progect：EasyLinkerAppNew
@@ -42,33 +41,16 @@ public class MySettingFragment extends BaseFragment<MySettingPresenter> implemen
     TextView mTvName;
     @BindView(R.id.et_sign)
     EditText mEtSign;
-    @BindView(R.id.et_phone)
-    EditText mEtPhone;
-    @BindView(R.id.ll_phone)
-    LinearLayout mLlPhone;
-    @BindView(R.id.et_email)
-    EditText mEtEmail;
-    @BindView(R.id.ll_email)
-    LinearLayout mLlEmail;
     @BindView(R.id.tv_logout)
     TextView mTvLogout;
-    @BindView(R.id.ll_edit)
-    LinearLayout mLlEdit;
-    @BindView(R.id.iv_edit)
-    ImageView mIvEdit;
-    @BindView(R.id.tv_edit)
-    TextView mTvEdit;
     @BindView(R.id.tv_qq_group)
-    TextView mTvQqGroup;
+    DrawableSizeTextView mTvQqGroup;
     @BindView(R.id.tv_github)
-    TextView mTvGithub;
-
-    // 是否正在编辑
-    private boolean isEditeting;
-    // 当前的电话
-    private String mCurrentPhone;
-    // 当前的邮箱
-    private String mCurrentEmail;
+    DrawableSizeTextView mTvGithub;
+    @BindView(R.id.tv_phone)
+    DrawableSizeTextView mTvPhone;
+    @BindView(R.id.tv_email)
+    DrawableSizeTextView mTvEmail;
 
 
     @Override
@@ -92,25 +74,6 @@ public class MySettingFragment extends BaseFragment<MySettingPresenter> implemen
         mPresenter.loadSelfInfo();
     }
 
-    /**
-     * 更新UI
-     */
-    private void updateUi() {
-        mIvEdit.setImageResource(isEditeting ? R.drawable.ic_edit_en : R.drawable.ic_edit_dis);
-        mTvEdit.setText(isEditeting ? "提交" : "编辑");
-        mTvEdit.setTextColor(isEditeting ? ContextCompat.getColor(mActivity, R.color.tab_blue) : ContextCompat.getColor(mActivity, R.color.nomal_text_color));
-        mEtPhone.setFocusable(isEditeting);
-        mEtPhone.setEnabled(isEditeting);
-        mEtPhone.setFocusableInTouchMode(isEditeting);
-        mEtEmail.setFocusable(isEditeting);
-        mEtEmail.setEnabled(isEditeting);
-        mEtEmail.setFocusableInTouchMode(isEditeting);
-        if (isEditeting) {
-            mEtPhone.requestFocus();
-            mEtPhone.setSelection(mEtPhone.getText().toString().length());
-        }
-    }
-
     @Override
     public void showLoading() {
 
@@ -129,9 +92,6 @@ public class MySettingFragment extends BaseFragment<MySettingPresenter> implemen
     @Override
     public void onLoadSelfInfo(boolean success) {
         if (success) {
-
-            isEditeting = false;
-            updateUi();
 
             User userInfo = mPresenter.getUserInfo();
             if (userInfo != null) {
@@ -155,11 +115,11 @@ public class MySettingFragment extends BaseFragment<MySettingPresenter> implemen
                 String username = userInfo.getUsername();
                 mTvName.setText(TextUtils.isEmpty(username) ? "用户名" : username);
                 // 手机
-                mCurrentPhone = userInfo.getPhone();
-                mEtPhone.setText(TextUtils.isEmpty(mCurrentPhone) ? "无" : mCurrentPhone);
+                String phone = userInfo.getPhone();
+                mTvPhone.setText(TextUtils.isEmpty(phone) ? "无" : phone);
                 // 邮箱
-                mCurrentEmail = userInfo.getEmail();
-                mEtEmail.setText(TextUtils.isEmpty(mCurrentEmail) ? "无" : mCurrentEmail);
+                String email = userInfo.getEmail();
+                mTvEmail.setText(TextUtils.isEmpty(email) ? "无" : email);
             }
         }
     }
@@ -171,47 +131,12 @@ public class MySettingFragment extends BaseFragment<MySettingPresenter> implemen
         ((BaseActivity) mActivity).finish();
     }
 
-    @Override
-    public String getPhone() {
-        return mEtPhone.getText().toString().trim();
-    }
 
-    @Override
-    public String getEmail() {
-        return mEtEmail.getText().toString().trim();
-    }
-
-    @Override
-    public boolean phoneIsChange(String phone) {
-        return !phone.equals(mCurrentPhone);
-    }
-
-    @Override
-    public boolean emailIsChange(String email) {
-        return !email.equals(mCurrentEmail);
-    }
-
-    @Override
-    public void noUserInfoChange() {
-        isEditeting = false;
-        updateUi();
-    }
-
-
-    @OnClick({R.id.tv_logout, R.id.ll_edit, R.id.tv_qq_group, R.id.tv_github})
+    @OnClick({R.id.tv_logout, R.id.tv_qq_group, R.id.tv_github})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_logout:   // 退出
                 mPresenter.logout();
-                break;
-            case R.id.ll_edit:   // 编辑
-//                if (isEditeting) {
-//                    // 提交修改
-//                    mPresenter.upDateUserInfo();
-//                } else {
-//                    isEditeting = true;
-//                    updateUi();
-//                }
                 break;
             case R.id.tv_qq_group:   // qq群
                 // 将qq群号复制到剪切板
@@ -247,6 +172,5 @@ public class MySettingFragment extends BaseFragment<MySettingPresenter> implemen
                 break;
         }
     }
-
 
 }

@@ -10,43 +10,12 @@
         android:id="@+id/iv_header_bg"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@drawable/header_bg"
         android:scaleType="centerCrop"
-        app:layout_constraintDimensionRatio="H,16:9"
+        app:layout_constraintDimensionRatio="H,2:1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- 编辑 -->
-    <LinearLayout
-        android:id="@+id/ll_edit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="@dimen/dp_6"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.94"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.05">
-
-        <ImageView
-            android:id="@+id/iv_edit"
-            android:layout_width="@dimen/dp_26"
-            android:layout_height="@dimen/dp_26"
-            android:src="@drawable/ic_edit_dis" />
-
-        <TextView
-            android:id="@+id/tv_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_8"
-            android:text="编辑"
-            android:textSize="@dimen/dp_16" />
-
-    </LinearLayout>
 
 
     <!-- 头像 -->
@@ -57,11 +26,11 @@
         android:src="@drawable/ic_header_default"
         app:civ_border_color="@color/white"
         app:civ_border_width="@dimen/dp_2"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_header_bg"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintTop_toTopOf="@+id/iv_header_bg"
+        app:layout_constraintVertical_bias="0.4" />
 
     <!-- 名称 -->
     <TextView
@@ -93,137 +62,99 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_name"
         tools:text="签名" />
 
-    
+
     <!-- 手机 -->
-    <LinearLayout
-        android:id="@+id/ll_phone"
+    <wang.tinycoder.easyiotkit.widget.DrawableSizeTextView
+        android:id="@+id/tv_phone"
         android:layout_width="0dp"
-        android:layout_height="@dimen/dp_38"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginRight="@dimen/dp_10"
+        android:drawableLeft="@drawable/ic_color_phone"
+        android:drawablePadding="@dimen/dp_10"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="@color/text_gray"
+        android:textSize="@dimen/dp_20"
+        app:dstv_drawableHeight="@dimen/dp_28"
+        app:dstv_drawableWidth="@dimen/dp_28"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_header_bg"
-        app:layout_constraintVertical_bias="0.1"
-        app:layout_constraintWidth_percent="0.8">
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="手机："
-            android:textSize="@dimen/dp_16" />
-
-        <EditText
-            android:id="@+id/et_phone"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/my_setting_et_bg"
-            android:enabled="false"
-            android:focusable="false"
-            android:inputType="phone"
-            android:paddingLeft="@dimen/dp_8"
-            android:paddingRight="@dimen/dp_8"
-            android:singleLine="true"
-            android:textColor="@color/nomal_text_color"
-            android:textSize="@dimen/dp_16" />
-
-
-    </LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/iv_header_bg" />
 
     <!-- 邮箱 -->
-    <LinearLayout
-        android:id="@+id/ll_email"
+    <wang.tinycoder.easyiotkit.widget.DrawableSizeTextView
+        android:id="@+id/tv_email"
         android:layout_width="0dp"
-        android:layout_height="@dimen/dp_38"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_16"
+        android:drawableLeft="@drawable/ic_color_email"
+        android:drawablePadding="@dimen/dp_10"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ll_phone"
-        app:layout_constraintVertical_bias="0.1"
-        app:layout_constraintWidth_percent="0.8">
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="邮箱："
-            android:textSize="@dimen/dp_16" />
-
-        <EditText
-            android:id="@+id/et_email"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/my_setting_et_bg"
-            android:enabled="false"
-            android:focusable="false"
-            android:inputType="textEmailAddress"
-            android:paddingLeft="@dimen/dp_8"
-            android:paddingRight="@dimen/dp_8"
-            android:singleLine="true"
-            android:textColor="@color/nomal_text_color"
-            android:textSize="@dimen/dp_16" />
-
-
-    </LinearLayout>
-
+        android:textColor="@color/text_gray"
+        android:textSize="@dimen/dp_20"
+        app:dstv_drawableHeight="@dimen/dp_30"
+        app:dstv_drawableWidth="@dimen/dp_30"
+        app:layout_constraintLeft_toLeftOf="@+id/tv_phone"
+        app:layout_constraintRight_toRightOf="@+id/tv_phone"
+        app:layout_constraintTop_toBottomOf="@+id/tv_phone" />
 
     <!-- QQ群 -->
-    <TextView
+    <wang.tinycoder.easyiotkit.widget.DrawableSizeTextView
         android:id="@+id/tv_qq_group"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_qq"
+        android:layout_marginTop="@dimen/dp_16"
+        android:drawableLeft="@drawable/ic_qq_group"
+        android:drawableRight="@drawable/ic_arrow_right"
         android:drawablePadding="@dimen/dp_10"
         android:gravity="center_vertical"
         android:text="@string/qq_group"
         android:textColor="@color/text_gray"
         android:textSize="@dimen/dp_20"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="@+id/ll_email"
-        app:layout_constraintRight_toRightOf="@+id/ll_email"
-        app:layout_constraintTop_toBottomOf="@+id/ll_email"
-        app:layout_constraintVertical_bias="0.1" />
+        app:dstv_drawableHeight="@dimen/dp_28"
+        app:dstv_drawableWidth="@dimen/dp_28"
+        app:layout_constraintLeft_toLeftOf="@+id/tv_phone"
+        app:layout_constraintRight_toRightOf="@+id/tv_phone"
+        app:layout_constraintTop_toBottomOf="@+id/tv_email" />
 
 
     <!-- github -->
-    <TextView
+    <wang.tinycoder.easyiotkit.widget.DrawableSizeTextView
         android:id="@+id/tv_github"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_16"
         android:drawableLeft="@drawable/ic_github"
+        android:drawableRight="@drawable/ic_arrow_right"
         android:drawablePadding="@dimen/dp_10"
+        android:ellipsize="middle"
         android:gravity="center_vertical"
+        android:singleLine="true"
         android:text="@string/github_addr"
         android:textColor="@color/blue"
         android:textSize="@dimen/dp_15"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="@+id/tv_qq_group"
-        app:layout_constraintRight_toRightOf="@+id/tv_qq_group"
-        app:layout_constraintTop_toBottomOf="@+id/tv_qq_group"
-        app:layout_constraintVertical_bias="0.1" />
+        app:dstv_drawableHeight="@dimen/dp_28"
+        app:dstv_drawableWidth="@dimen/dp_28"
+        app:layout_constraintLeft_toLeftOf="@+id/tv_phone"
+        app:layout_constraintRight_toRightOf="@+id/tv_phone"
+        app:layout_constraintTop_toBottomOf="@+id/tv_qq_group" />
 
     <!-- 退出登陆 -->
     <TextView
         android:id="@+id/tv_logout"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/dp_42"
-        android:layout_marginBottom="@dimen/dp_10"
-        android:layout_marginTop="71dp"
-        android:background="@drawable/logout_bg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginRight="@dimen/dp_20"
         android:gravity="center"
+        android:padding="@dimen/dp_10"
         android:text="@string/logout"
         android:textColor="@color/white"
         android:textSize="@dimen/dp_16"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_github"
-        app:layout_constraintWidth_percent="0.9" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
