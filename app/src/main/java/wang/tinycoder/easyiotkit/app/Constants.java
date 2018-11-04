@@ -10,7 +10,7 @@ package wang.tinycoder.easyiotkit.app;
 public class Constants {
 
     // 调试模式
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     // 高德地图key
     public static final String AMAP_WEB_KEY = "d0abb1240c9387fd61e3152dfa743d48";

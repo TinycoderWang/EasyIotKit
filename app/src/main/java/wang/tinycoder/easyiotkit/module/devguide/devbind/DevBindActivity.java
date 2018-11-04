@@ -65,7 +65,7 @@ public class DevBindActivity extends BaseActivity<DevBindPresenter> implements D
                         hasCameraPermission = aBoolean.booleanValue();
                         if (hasCameraPermission) {
                             // 开始扫描二维码
-                            mZxvScanner.startSpotDelay(100);
+                            mZxvScanner.startSpotDelay(500);
                             mZxvScanner.startCamera();
                             mZxvScanner.showScanRect();
                         } else {
@@ -177,6 +177,9 @@ public class DevBindActivity extends BaseActivity<DevBindPresenter> implements D
             setResult(RESULT_OK, intent);
             finish();
         } else {
+            Intent intent = new Intent();
+            setResult(RESULT_CANCELED, intent);
+            finish();
             finish();
         }
     }

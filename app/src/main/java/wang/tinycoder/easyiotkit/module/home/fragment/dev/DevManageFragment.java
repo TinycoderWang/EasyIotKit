@@ -108,23 +108,23 @@ public class DevManageFragment extends BaseFragment<DevManagePresenter> implemen
         // 测试用，写死
         List<Banner> data = new ArrayList<>();
         Banner banner1 = new Banner();
-        banner1.setImg("https://github.com/TinycoderWang/EasyIotKit/raw/master/art/1.jpeg");
+        banner1.setImg("http://pho6yclrv.bkt.clouddn.com/1.jpeg");
         banner1.setTitle("标题1");
         data.add(banner1);
         Banner banner2 = new Banner();
-        banner2.setImg("http://octklz398.bkt.clouddn.com/banner2.jpg");
+        banner2.setImg("http://pho6yclrv.bkt.clouddn.com/2.jpg");
         banner2.setTitle("标题2");
         data.add(banner2);
         Banner banner3 = new Banner();
-        banner3.setImg("http://octklz398.bkt.clouddn.com/banner3.jpg");
+        banner3.setImg("http://pho6yclrv.bkt.clouddn.com/3.jpg");
         banner3.setTitle("标题3");
         data.add(banner3);
         Banner banner4 = new Banner();
-        banner4.setImg("http://octklz398.bkt.clouddn.com/banner4.jpg");
+        banner4.setImg("http://pho6yclrv.bkt.clouddn.com/4.gif");
         banner4.setTitle("标题4");
         data.add(banner4);
         Banner banner5 = new Banner();
-        banner5.setImg("http://octklz398.bkt.clouddn.com/banner5.jpg");
+        banner5.setImg("http://pho6yclrv.bkt.clouddn.com/5.jpg");
         banner5.setTitle("标题5");
         data.add(banner5);
         mRcbBanner.setAdapter(new BannerAdapter(mActivity, data));
