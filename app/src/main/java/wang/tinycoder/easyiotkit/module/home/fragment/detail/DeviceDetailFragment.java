@@ -1,33 +1,29 @@
 package wang.tinycoder.easyiotkit.module.home.fragment.detail;
 
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
+import com.orhanobut.logger.Logger;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.Unbinder;
 import wang.tinycoder.easyiotkit.R;
 import wang.tinycoder.easyiotkit.base.BaseActivity;
 import wang.tinycoder.easyiotkit.base.BaseFragment;
 import wang.tinycoder.easyiotkit.bean.Device;
 import wang.tinycoder.easyiotkit.bean.DeviceData;
+import wang.tinycoder.easyiotkit.bean.WeatherBean;
+import wang.tinycoder.easyiotkit.module.home.HomeActivity;
 import wang.tinycoder.easyiotkit.util.SpannableStringUtils;
 
 /**
@@ -44,18 +40,76 @@ public class DeviceDetailFragment extends BaseFragment<DeviceDetailPresenter> im
     TextView mTvTemperature;
     @BindView(R.id.tv_humidity)
     TextView mTvHumidity;
-    @BindView(R.id.chart)
-    LineChart mChart;
-    Unbinder unbinder;
+    @BindView(R.id.imageView)
+    ImageView mImageView;
+    @BindView(R.id.tv_weather)
+    TextView mTvWeather;
+    @BindView(R.id.tv_wind)
+    TextView mTvWind;
+    @BindView(R.id.st_led1)
+    Switch mStLed1;
+    @BindView(R.id.st_led2)
+    Switch mStLed2;
+    @BindView(R.id.st_led3)
+    Switch mStLed3;
+    @BindView(R.id.st_led4)
+    Switch mStLed4;
+    @BindView(R.id.st_led5)
+    Switch mStLed5;
+    @BindView(R.id.st_led6)
+    Switch mStLed6;
+
+    // 当前设备
     private Device mDevice;
-    private Legend legend;
-    private XAxis xAxis;
-    private YAxis leftYAxis;
-    private YAxis rightYaxis;
+    // 定位
+    private AMapLocationClient mlocationClient = null;
+    private CompoundButton.OnCheckedChangeListener switchListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            int id = buttonView.getId();
+            int switchIndex = 0;
+            switch (id) {
+                case R.id.st_led1:
+                    switchIndex = 1;
+                    break;
+                case R.id.st_led2:
+                    switchIndex = 2;
+                    break;
+                case R.id.st_led3:
+                    switchIndex = 3;
+                    break;
+                case R.id.st_led4:
+                    switchIndex = 4;
+                    break;
+                case R.id.st_led5:
+                    switchIndex = 5;
+                    break;
+                case R.id.st_led6:
+                    switchIndex = 6;
+                    break;
+            }
+
+            showToast("index:" + switchIndex + " , isCheck:" + isChecked);
+
+            if (mDevice == null) {
+                mDevice = ((HomeActivity) mActivity).getCurrentDevice();
+            }
+            if (mDevice != null) {
+                mPresenter.sendCommandToDevice(mDevice.getId(), "{cmd:1}");
+            }
+        }
+    };
+
+
+    @Override
+    protected void onVisible() {
+        super.onVisible();
+        mDevice = ((HomeActivity) mActivity).getCurrentDevice();
+    }
 
     @Override
     protected int getlayoutId() {
-        return R.layout.activity_dev_detail;
+        return R.layout.fragment_dev_detail;
     }
 
     @Override
@@ -66,75 +120,76 @@ public class DeviceDetailFragment extends BaseFragment<DeviceDetailPresenter> im
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        // 初始化chart
-        initLineChart();
+        // 获取位置
+        initLocation();
+        // 初始化监听
+        initListener();
     }
 
-    private void initLineChart() {
+    private void initListener() {
+        mStLed1.setOnCheckedChangeListener(switchListener);
+        mStLed2.setOnCheckedChangeListener(switchListener);
+        mStLed3.setOnCheckedChangeListener(switchListener);
+        mStLed4.setOnCheckedChangeListener(switchListener);
+        mStLed5.setOnCheckedChangeListener(switchListener);
+        mStLed6.setOnCheckedChangeListener(switchListener);
+    }
 
-        /***图表设置***/
-        //是否展示网格线
-        mChart.setDrawGridBackground(false);
-        //是否显示边界
-        mChart.setDrawBorders(true);
-        //是否可以拖动
-        mChart.setDragEnabled(false);
-        //是否有触摸事件
-        mChart.setTouchEnabled(true);
-        //设置XY轴动画效果
-        mChart.animateY(1500);
-        mChart.animateX(1500);
-
-        /***XY轴的设置***/
-        xAxis = mChart.getXAxis();
-        leftYAxis = mChart.getAxisLeft();
-        rightYaxis = mChart.getAxisRight();
-        //X轴设置显示位置在底部
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setAxisMinimum(0f);
-        xAxis.setGranularity(1f);
-        //保证Y轴从0开始，不然会上移一点
-        leftYAxis.setAxisMinimum(0f);
-        rightYaxis.setAxisMinimum(0f);
-        // 网格线
-        xAxis.setDrawGridLines(false);
-        leftYAxis.setDrawGridLines(true);
-        leftYAxis.enableGridDashedLine(10f, 10f, 0f);
-        rightYaxis.setDrawGridLines(false);
-        rightYaxis.setEnabled(false);
-
-        // 轴显示
-        xAxis.setValueFormatter(new IAxisValueFormatter() {
+    private void initLocation() {
+        //声明mLocationOption对象
+        AMapLocationClientOption mLocationOption = null;
+        mlocationClient = new AMapLocationClient(mActivity);
+        //初始化定位参数
+        mLocationOption = new AMapLocationClientOption();
+        //设置返回地址信息，默认为true
+        mLocationOption.setNeedAddress(true);
+        //设置定位监听
+        mlocationClient.setLocationListener(new AMapLocationListener() {
             @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                return "";
+            public void onLocationChanged(AMapLocation amapLocation) {
+                if (amapLocation != null) {
+                    if (amapLocation.getErrorCode() == 0) {
+//                        //定位成功回调信息，设置相关消息
+//                        amapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
+//                        amapLocation.getLatitude();//获取纬度
+//                        amapLocation.getLongitude();//获取经度
+//                        amapLocation.getAccuracy();//获取精度信息
+//                        amapLocation.getAddress();//地址，如果option中设置isNeedAddress为false，则没有此结果，网络定位结果中会有地址信息，GPS定位不返回地址信息。
+//                        amapLocation.getCountry();//国家信息
+//                        amapLocation.getProvince();//省信息
+//                        amapLocation.getCity();//城市信息
+//                        amapLocation.getDistrict();//城区信息
+//                        amapLocation.getStreet();//街道信息
+//                        amapLocation.getStreetNum();//街道门牌号信息
+//                        amapLocation.getCityCode();//城市编码
+//                        amapLocation.getAoiName();//获取当前定位点的AOI信息
+                        String adCode = amapLocation.getAdCode();//地区编码
+                        // 获取天气信息
+                        mPresenter.requestWeather(adCode);
+                        // 停止定位
+                        mlocationClient.stopAssistantLocation();
+                        mlocationClient.stopLocation();
+                    } else {
+                        //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
+                        Logger.e("%s location Error, ErrCode:%d   , errInfo:%s", amapLocation.getErrorCode(), amapLocation.getErrorInfo());
+                    }
+                }
             }
         });
-
-
-        mChart.setBackgroundColor(Color.WHITE);
-        //是否显示边界
-        mChart.setDrawBorders(false);
-
-        /***折线图例 标签 设置***/
-        legend = mChart.getLegend();
-        //设置显示类型，LINE CIRCLE SQUARE EMPTY 等等 多种方式，查看LegendForm 即可
-        legend.setForm(Legend.LegendForm.LINE);
-        legend.setTextSize(12f);
-        //显示位置 右上方
-        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
-        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
-        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        //是否绘制在图表里面
-        legend.setDrawInside(false);
-
-        // 不显示数据描述
-        mChart.getDescription().setEnabled(false);
-        // 没有数据的时候，显示“暂无数据”
-        mChart.setNoDataText("暂无数据");
-
-        mChart.invalidate();
+        //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+        //设置定位间隔,单位毫秒,默认为2000ms
+        mLocationOption.setInterval(20000);
+        //设置定位参数
+        mlocationClient.setLocationOption(mLocationOption);
+        // 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，
+        // 注意设置合适的定位时间的间隔（最小间隔支持为1000ms），并且在合适时间调用stopLocation()方法来取消定位请求
+        // 在定位结束后，在合适的生命周期调用onDestroy()方法
+        // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
+        //启动定位
+        mlocationClient.startLocation();
     }
+
 
     @Override
     protected void loadData(Bundle savedInstanceState) {
@@ -175,8 +230,38 @@ public class DeviceDetailFragment extends BaseFragment<DeviceDetailPresenter> im
         if (currentData != null && currentData.size() > 0) {
             // 当前状态
             showCurentState(currentData.get(0));
-            // 趋势
-            showTrend(currentData);
+        }
+    }
+
+    @Override
+    public void showWeather(WeatherBean weatherBean) {
+        if (weatherBean != null && "1".equals(weatherBean.getStatus())) {
+            List<WeatherBean.LivesBean> lives = weatherBean.getLives();
+            if (lives != null && lives.size() > 0) {
+                WeatherBean.LivesBean livesBean = lives.get(0);
+                // 温度
+                mTvTemperature.setText(String.format("%s°", livesBean.getTemperature()));
+                // 天气
+                String weather = livesBean.getWeather();
+                mTvWeather.setText(weather);
+                mImageView.setImageResource(R.drawable.weather_qing);
+                if (!TextUtils.isEmpty(weather)) {
+                    if (weather.contains("阴")) {
+                        mImageView.setImageResource(R.drawable.weather_yin);
+                    } else if (weather.contains("云")) {
+                        mImageView.setImageResource(R.drawable.weather_duoyun);
+                    } else if (weather.contains("雨")) {
+                        mImageView.setImageResource(R.drawable.weather_yu);
+                    }
+                }
+                // 风力
+                mTvWind.setText(String.format("%s风 : %s级", livesBean.getWinddirection(), livesBean.getWindpower()));
+                // 湿度
+                mTvHumidity.setText(String.format("湿度 : %s%%", livesBean.getHumidity()));
+            }
+
+        } else {
+            showToast("获取天气失败！");
         }
     }
 
@@ -229,124 +314,13 @@ public class DeviceDetailFragment extends BaseFragment<DeviceDetailPresenter> im
         return 0;
     }
 
-    /**
-     * 显示趋势
-     *
-     * @param currentData
-     */
-    private void showTrend(List<DeviceData> currentData) {
-        // 逆序
-        Collections.reverse(currentData);
-
-        List<Entry> tempEntry = new ArrayList<>();
-        genValue(currentData, 0, tempEntry);
-        List<Entry> humEntry = new ArrayList<>();
-        genValue(currentData, 1, humEntry);
-        if (mChart.getData() != null && mChart.getData().getDataSetCount() > 1) {
-            ((LineDataSet) mChart.getData().getDataSetByIndex(0)).setValues(tempEntry);
-            ((LineDataSet) mChart.getData().getDataSetByIndex(1)).setValues(humEntry);
-            mChart.getData().notifyDataChanged();
-            mChart.notifyDataSetChanged();
-            mChart.invalidate();
-        } else {
-            addLine(currentData, "温度", Color.parseColor("#F48C7A"), 0);
-            Drawable drawable = getResources().getDrawable(R.drawable.chart_temp_shader);
-            setChartFillDrawable(drawable, 0);
-            addLine(currentData, "湿度", Color.parseColor("#1DE1F7"), 1);
-            drawable = getResources().getDrawable(R.drawable.chart_hum_shader);
-            setChartFillDrawable(drawable, 1);
+    @Override
+    public void onDestroy() {
+        if (mlocationClient != null) {
+            mlocationClient.stopAssistantLocation();
+            mlocationClient.onDestroy();
         }
-
-    }
-
-
-    /**
-     * 曲线初始化设置 一个LineDataSet 代表一条曲线
-     *
-     * @param lineDataSet 线条
-     * @param color       线条颜色
-     * @param mode
-     */
-    private void initLineDataSet(LineDataSet lineDataSet, int color, LineDataSet.Mode mode) {
-        // 设置曲线颜色
-        lineDataSet.setColor(color);
-        // 设置圆圈颜色
-        lineDataSet.setCircleColor(color);
-        // 设置线宽
-        lineDataSet.setLineWidth(1f);
-        // 圆半径
-        lineDataSet.setCircleRadius(3f);
-        //设置曲线值的圆点是实心还是空心
-        lineDataSet.setDrawCircleHole(false);
-        lineDataSet.setValueTextSize(10f);
-        //设置折线图填充
-        lineDataSet.setDrawFilled(true);
-        lineDataSet.setFormLineWidth(1f);
-        lineDataSet.setFormSize(15.f);
-        // 设置平滑曲线
-        if (mode == null) {
-            //设置曲线展示为圆滑曲线（如果不设置则默认折线）
-            lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-        } else {
-            lineDataSet.setMode(mode);
-        }
-        // 显示坐标点的小圆点
-        lineDataSet.setDrawCircles(true);
-        // 显示坐标点的数据
-        lineDataSet.setDrawValues(true);
-        // 不显示定位线
-        lineDataSet.setHighlightEnabled(false);
-    }
-
-
-    /**
-     * 设置线条填充背景颜色
-     *
-     * @param drawable
-     */
-    public void setChartFillDrawable(Drawable drawable, int index) {
-        if (mChart.getData() != null && mChart.getData().getDataSetCount() > index) {
-            LineDataSet lineDataSet = (LineDataSet) mChart.getData().getDataSetByIndex(index);
-            //避免在 initLineDataSet()方法中 设置了 lineDataSet.setDrawFilled(false); 而无法实现效果
-            lineDataSet.setDrawFilled(true);
-            lineDataSet.setFillDrawable(drawable);
-        }
-    }
-
-    /**
-     * 添加曲线
-     */
-    private void addLine(List<DeviceData> dataList, String name, int color, int index) {
-        List<Entry> entries = new ArrayList<>();
-        genValue(dataList, index, entries);
-        // 每一个LineDataSet代表一条线
-        LineDataSet lineDataSet = new LineDataSet(entries, name);
-        initLineDataSet(lineDataSet, color, null);
-        LineData lineData = mChart.getLineData();
-        if (lineData == null) {
-            lineData = new LineData(lineDataSet);
-            mChart.setData(lineData);
-        } else {
-            lineData.addDataSet(lineDataSet);
-        }
-        mChart.invalidate();
-    }
-
-    private void genValue(List<DeviceData> dataList, int index, List<Entry> entries) {
-        String data;
-        float y = 0;
-        for (int i = 0; i < dataList.size(); i++) {
-            data = dataList.get(i).getData().getData();
-            String[] split = data.split("-");
-            if (split != null && split.length > index) {
-                try {
-                    y = Float.parseFloat(split[index]);
-                } catch (Exception e) {
-                    y = 0;
-                }
-                entries.add(new Entry(i, y));
-            }
-        }
+        super.onDestroy();
     }
 
 }

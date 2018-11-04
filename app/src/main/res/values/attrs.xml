@@ -104,4 +104,10 @@
         </attr>
     </declare-styleable>
 
+    <!-- 可以设置drawable大小的textview -->
+    <declare-styleable name="DrawableSizeTextView">
+        <attr name="dstv_drawableWidth" format="dimension"/>
+        <attr name="dstv_drawableHeight" format="dimension"/>
+    </declare-styleable>
+
 </resources>

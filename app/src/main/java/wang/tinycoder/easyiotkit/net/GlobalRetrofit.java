@@ -41,6 +41,9 @@ public class GlobalRetrofit {
     private Retrofit retrofit;
     private Api mApi;
 
+    private Retrofit otherRetrofit;
+    private OtherApi mOtherApi;
+
     public static final String CONTENT_TYPE_NAME = "Content-Type";
     public static final String CONTENT_ACCEPT_NAME = "Accept";
     public static final String CONTENT_TYPE_JSON = "application/json";
@@ -62,6 +65,10 @@ public class GlobalRetrofit {
         return mApi;
     }
 
+    public OtherApi getOtherApi() {
+        return mOtherApi;
+    }
+
     private GlobalRetrofit() {
         retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
@@ -70,6 +77,14 @@ public class GlobalRetrofit {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())//为了使用Rxjava必须添加
                 .build();
         mApi = retrofit.create(Api.class);
+
+
+        otherRetrofit = new Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())//为了使用Rxjava必须添加
+                .build();
+        mOtherApi = otherRetrofit.create(OtherApi.class);
     }
 
     public OkHttpClient genericClient() {

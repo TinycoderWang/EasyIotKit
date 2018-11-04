@@ -3,6 +3,7 @@ package wang.tinycoder.easyiotkit.module.devguide.guide;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -119,7 +120,7 @@ public class AddDevGuideActivity extends BaseActivity<AddDevGuidePresenter> impl
                         stype = CONFIG;
                         // 开始smartconfig
                         Intent configIntent = new Intent(this, SmartConfigActivity.class);
-                        configIntent.putExtra(Constants.EXTRA_DEVICE_KEY, mDevice.getKey());
+                        configIntent.putExtra(Constants.EXTRA_DEVICE_KEY, formateDeviveKey(mDevice.getKey()));
                         startActivityForResult(configIntent, CONFIG);
                     }
                 }
@@ -138,6 +139,13 @@ public class AddDevGuideActivity extends BaseActivity<AddDevGuidePresenter> impl
         }
 
         changeShow(stype);
+    }
+
+    private String formateDeviveKey(String key) {
+        if (!TextUtils.isEmpty(key)) {
+            return key.replaceAll("-", "/");
+        }
+        return "";
     }
 
 

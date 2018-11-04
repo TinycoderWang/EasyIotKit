@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:layout_editor_absoluteY="25dp">
+
+
+    <!-- 头背景 -->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp_160"
+        android:paddingLeft="0dp"
+        android:paddingTop="0dp"
+        android:paddingRight="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/weather_qing"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_2"
+        android:background="@color/soft_gray"
+        app:layout_constraintBottom_toBottomOf="@id/imageView" />
+
+
+    <!-- 温度 -->
+    <TextView
+        android:id="@+id/tv_temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp_66"
+        app:layout_constraintBottom_toBottomOf="@id/imageView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/tv_humidity"
+        app:layout_constraintTop_toTopOf="@id/imageView"
+        tools:text="45°" />
+
+    <TextView
+        android:id="@+id/tv_weather"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp_18"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_temperature"
+        app:layout_constraintLeft_toRightOf="@+id/tv_temperature"
+        tools:text="阴" />
+
+    <TextView
+        android:id="@+id/tv_wind"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dp_20"
+        android:layout_weight="1"
+        android:gravity="end"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp_16"
+        app:layout_constraintBottom_toTopOf="@id/tv_humidity"
+        app:layout_constraintLeft_toRightOf="@id/tv_temperature"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_temperature"
+        tools:text="北风：1级" />
+
+    <TextView
+        android:id="@+id/tv_humidity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dp_20"
+        android:layout_weight="1"
+        android:gravity="end"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp_18"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_temperature"
+        app:layout_constraintLeft_toRightOf="@+id/tv_temperature"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_wind"
+        tools:text="湿度：45%" />
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_10">
+
+            <!-- LED1灯 -->
+            <wang.tinycoder.easyiotkit.widget.DrawableSizeTextView
+                android:id="@+id/dstv_led1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="LED1:"
+                android:textSize="@dimen/dp_18"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintHorizontal_weight="2"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/st_led1"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Switch
+                android:id="@+id/st_led1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dp_20"
+                android:switchMinWidth="@dimen/dp_30"
+                android:textOff="  "
+                android:textOn="  "
+                android:thumb="@drawable/thumb"
+                android:track="@drawable/track"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintLeft_toRightOf="@+id/dstv_led1"
+                app:layout_constraintRight_toLeftOf="@+id/dstv_led2"
+                app:layout_constraintTop_toTopOf="@+id/dstv_led1" />
+
+
+            <wang.tinycoder.easyiotkit.widget.DrawableSizeTextView
+                android:id="@+id/dstv_led2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="LED2:"
+                android:textSize="@dimen/dp_18"
+                app:layout_constraintHorizontal_weight="2"
+                app:layout_constraintLeft_toRightOf="@+id/st_led1"
+                app:layout_constraintRight_toLeftOf="@+id/st_led2"
+                app:layout_constraintTop_toTopOf="@+id/dstv_led1" />
+
+            <Switch
+                android:id="@+id/st_led2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dp_20"
+                android:switchMinWidth="@dimen/dp_30"
+                android:textOff="  "
+                android:textOn="  "
+                android:thumb="@drawable/thumb"
+                android:track="@drawable/track"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintLeft_toRightOf="@+id/dstv_led2"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/dstv_led1" />
+
+
+            <!-- LED1灯 -->
+            <wang.tinycoder.easyiotkit.widget.DrawableSizeTextView
+                android:id="@+id/dstv_led3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_20"
+                android:gravity="center"
+                android:text="LED3:"
+                android:textSize="@dimen/dp_18"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintHorizontal_weight="2"
+                app:layout_constraintLeft_toLeftOf="@+id/dstv_led1"
+                app:layout_constraintRight_toLeftOf="@+id/st_led3"
+                app:layout_constraintTop_toBottomOf="@+id/dstv_led1" />
+
+            <Switch
+                android:id="@+id/st_led3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dp_20"
+                android:switchMinWidth="@dimen/dp_30"
+                android:textOff="  "
+                android:textOn="  "
+                android:thumb="@drawable/thumb"
+                android:track="@drawable/track"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintLeft_toRightOf="@+id/dstv_led3"
+                app:layout_constraintRight_toLeftOf="@+id/dstv_led4"
+                app:layout_constraintTop_toTopOf="@+id/dstv_led3" />
+
+
+            <wang.tinycoder.easyiotkit.widget.DrawableSizeTextView
+                android:id="@+id/dstv_led4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="LED4:"
+                android:textSize="@dimen/dp_18"
+                app:layout_constraintHorizontal_weight="2"
+                app:layout_constraintLeft_toRightOf="@+id/st_led3"
+                app:layout_constraintRight_toLeftOf="@+id/st_led4"
+                app:layout_constraintTop_toTopOf="@+id/dstv_led3" />
+
+            <Switch
+                android:id="@+id/st_led4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dp_20"
+                android:switchMinWidth="@dimen/dp_30"
+                android:textOff="  "
+                android:textOn="  "
+                android:thumb="@drawable/thumb"
+                android:track="@drawable/track"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintLeft_toRightOf="@+id/dstv_led4"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/dstv_led3" />
+
+            <!-- LED5灯 -->
+            <wang.tinycoder.easyiotkit.widget.DrawableSizeTextView
+                android:id="@+id/dstv_led5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_20"
+                android:gravity="center"
+                android:text="LED5:"
+                android:textSize="@dimen/dp_18"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintHorizontal_weight="2"
+                app:layout_constraintLeft_toLeftOf="@+id/dstv_led1"
+                app:layout_constraintRight_toLeftOf="@+id/st_led5"
+                app:layout_constraintTop_toBottomOf="@+id/dstv_led3" />
+
+            <Switch
+                android:id="@+id/st_led5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dp_20"
+                android:switchMinWidth="@dimen/dp_30"
+                android:textOff="  "
+                android:textOn="  "
+                android:thumb="@drawable/thumb"
+                android:track="@drawable/track"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintLeft_toRightOf="@+id/dstv_led5"
+                app:layout_constraintRight_toLeftOf="@+id/dstv_led6"
+                app:layout_constraintTop_toTopOf="@+id/dstv_led5" />
+
+
+            <wang.tinycoder.easyiotkit.widget.DrawableSizeTextView
+                android:id="@+id/dstv_led6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="LED6:"
+                android:textSize="@dimen/dp_18"
+                app:layout_constraintHorizontal_weight="2"
+                app:layout_constraintLeft_toRightOf="@+id/st_led5"
+                app:layout_constraintRight_toLeftOf="@+id/st_led6"
+                app:layout_constraintTop_toTopOf="@+id/dstv_led5" />
+
+            <Switch
+                android:id="@+id/st_led6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dp_20"
+                android:switchMinWidth="@dimen/dp_30"
+                android:textOff="  "
+                android:textOn="  "
+                android:thumb="@drawable/thumb"
+                android:track="@drawable/track"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintLeft_toRightOf="@+id/dstv_led6"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/dstv_led5" />
+
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+
+</android.support.constraint.ConstraintLayout>

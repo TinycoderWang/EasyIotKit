@@ -12,6 +12,9 @@ public class Constants {
     // 调试模式
     public static final boolean DEBUG = true;
 
+    // 高德地图key
+    public static final String AMAP_WEB_KEY = "d0abb1240c9387fd61e3152dfa743d48";
+
     // 服务器地址·
 //    public static final String BASE_URL = "http://10.0.2.2:2500/";
 //    public static final String BASE_HOST = "http://10.0.2.2/";

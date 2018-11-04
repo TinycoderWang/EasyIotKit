@@ -19,6 +19,8 @@
     <!--允许程序读写手机状态和身份-->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- 定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
 
     <application
@@ -34,6 +36,11 @@
         <meta-data
             android:name="android.max_aspect"
             android:value="2.2" />
+        <!-- 高德地图的key -->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="${AMAP_KEY}" />
+        <service android:name="com.amap.api.location.APSService"></service>
 
         <!-- 闪屏页面 -->
         <activity
@@ -98,9 +105,9 @@
             android:screenOrientation="portrait">
 
             <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
 
         </activity>

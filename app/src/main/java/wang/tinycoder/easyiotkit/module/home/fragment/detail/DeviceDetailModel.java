@@ -7,8 +7,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+import wang.tinycoder.easyiotkit.app.Constants;
 import wang.tinycoder.easyiotkit.bean.DeviceData;
 import wang.tinycoder.easyiotkit.bean.NetResult;
+import wang.tinycoder.easyiotkit.bean.WeatherBean;
 import wang.tinycoder.easyiotkit.net.GlobalRetrofit;
 
 /**
@@ -24,6 +26,22 @@ public class DeviceDetailModel implements DeviceDetailContract.Model {
 
     }
 
+    /**
+     * 获取天气信息
+     *
+     * @param adCode   城市编码
+     * @param observer
+     */
+    @Override
+    public void requestWeather(String adCode, Observer<WeatherBean> observer) {
+
+        GlobalRetrofit.getInstance().getOtherApi()
+                .requestWeather(String.format("http://restapi.amap.com/v3/weather/weatherInfo?city=%s&key=%s&extensions=base", adCode, Constants.AMAP_WEB_KEY))
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
 
     /**
      * 获取设备数据
@@ -62,4 +80,6 @@ public class DeviceDetailModel implements DeviceDetailContract.Model {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
     }
+
+
 }

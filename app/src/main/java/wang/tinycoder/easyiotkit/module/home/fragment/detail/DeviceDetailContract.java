@@ -7,6 +7,7 @@ import wang.tinycoder.easyiotkit.base.interfaces.IModel;
 import wang.tinycoder.easyiotkit.base.interfaces.IView;
 import wang.tinycoder.easyiotkit.bean.DeviceData;
 import wang.tinycoder.easyiotkit.bean.NetResult;
+import wang.tinycoder.easyiotkit.bean.WeatherBean;
 
 /**
  * Progect：EasyIotKit
@@ -21,6 +22,7 @@ public interface DeviceDetailContract {
 
         void update();
 
+        void showWeather(WeatherBean weatherBean);
     }
 
     interface Model extends IModel {
@@ -37,11 +39,20 @@ public interface DeviceDetailContract {
 
         /**
          * 发送指令
+         *
          * @param deviceId 设备id
-         * @param command 命令
+         * @param command  命令
          * @param observer
          */
         void sendCommandToDevice(String deviceId, String command, Observer<NetResult> observer);
+
+        /**
+         * 获取天气
+         *
+         * @param adCode   城市编码
+         * @param observer
+         */
+        void requestWeather(String adCode, Observer<WeatherBean> observer);
     }
 
 }

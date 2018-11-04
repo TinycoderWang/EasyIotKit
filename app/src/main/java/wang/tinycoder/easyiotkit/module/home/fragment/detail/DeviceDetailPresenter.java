@@ -12,6 +12,7 @@ import io.reactivex.disposables.Disposable;
 import wang.tinycoder.easyiotkit.base.BasePresenter;
 import wang.tinycoder.easyiotkit.bean.DeviceData;
 import wang.tinycoder.easyiotkit.bean.NetResult;
+import wang.tinycoder.easyiotkit.bean.WeatherBean;
 
 /**
  * Progect：EasyIotKit
@@ -31,6 +32,38 @@ public class DeviceDetailPresenter extends BasePresenter<DeviceDetailContract.Vi
         super(rootView, model);
         currentData = new ArrayList<>();
     }
+
+
+    /**
+     * 获取天气
+     *
+     * @param adCode
+     */
+    public void requestWeather(String adCode) {
+        mModel.requestWeather(adCode, new Observer<WeatherBean>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                mCompositeDisposable.add(d);
+            }
+
+            @Override
+            public void onNext(WeatherBean weatherBean) {
+                mView.showWeather(weatherBean);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Logger.e("%s 获取天气失败！ MSG : ", TAG, e.getMessage());
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onComplete() {
+                Logger.i("%s 获取天气成功！", TAG);
+            }
+        });
+    }
+
 
     // 请求数据
     public void requestDeviceData(String deviceId) {
@@ -155,4 +188,5 @@ public class DeviceDetailPresenter extends BasePresenter<DeviceDetailContract.Vi
     public List<DeviceData> getCurrentData() {
         return currentData;
     }
+
 }

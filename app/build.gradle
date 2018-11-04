@@ -19,9 +19,19 @@ android {
         versionName rootProject.ext.android["versionName"]
         testInstrumentationRunner rootProject.ext.dependencies["androidJUnitRunner"]
 
+        // 占位符
+        manifestPlaceholders = [
+                AMAP_KEY: "0a3f2c68729c9e0021d089f8578ce066",
+        ]
+
     }
     buildTypes {
         release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.releaseConfig
+        }
+        debug{
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.releaseConfig
@@ -75,6 +85,9 @@ dependencies {
     implementation rootProject.ext.dependencies["mqtt"]
     implementation rootProject.ext.dependencies["mqtt-client"]
     implementation project(':XSmartConfigLib')
+    // location
+    implementation rootProject.ext.dependencies["location"]
+
 
 
 }

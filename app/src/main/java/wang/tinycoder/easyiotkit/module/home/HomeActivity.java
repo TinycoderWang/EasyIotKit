@@ -13,7 +13,6 @@ import wang.tinycoder.easyiotkit.R;
 import wang.tinycoder.easyiotkit.app.Constants;
 import wang.tinycoder.easyiotkit.base.BaseActivity;
 import wang.tinycoder.easyiotkit.bean.Device;
-import wang.tinycoder.easyiotkit.module.devdetail.DeviceDetailActivity;
 import wang.tinycoder.easyiotkit.module.home.fragment.HomeFragmentFactory;
 import wang.tinycoder.easyiotkit.module.login.LoginActivity;
 
@@ -51,7 +50,8 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
 
 
     private HomeFragmentFactory fragmentFactory;
-
+    // 当前操作中的设备
+    private Device currentDevice;
 
     @Override
     public int getLayoutId() {
@@ -108,15 +108,31 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
 
     // 跳转到设备详情
     public void gotoDeviceDetail(Device device) {
-        if (device != null) {
-            Intent intent = new Intent(this, DeviceDetailActivity.class);
-            intent.putExtra(Constants.EXTRA_DEVICE, device);
-            startActivity(intent);
-        }
+
+        // 保存当前选中设备
+        currentDevice = device;
+
+        // 不做设备详情页的独立页面了，简单切换到fragment
+        mRbDevDetail.setChecked(true);
+
+//        // 跳转独立的详情页面
+//        if (device != null) {
+//            Intent intent = new Intent(this, DeviceDetailActivity.class);
+//            intent.putExtra(Constants.EXTRA_DEVICE, device);
+//            startActivity(intent);
+//        }
     }
 
     @Override
     public void onBackPressed() {
         finish();
+    }
+
+    public Device getCurrentDevice() {
+        return currentDevice;
+    }
+
+    public void setCurrentDevice(Device currentDevice) {
+        this.currentDevice = currentDevice;
     }
 }
