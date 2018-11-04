@@ -108,7 +108,7 @@ public class DevManageFragment extends BaseFragment<DevManagePresenter> implemen
         // 测试用，写死
         List<Banner> data = new ArrayList<>();
         Banner banner1 = new Banner();
-        banner1.setImg("http://octklz398.bkt.clouddn.com/banner1.jpg");
+        banner1.setImg("https://github.com/TinycoderWang/EasyIotKit/raw/master/art/1.jpeg");
         banner1.setTitle("标题1");
         data.add(banner1);
         Banner banner2 = new Banner();
